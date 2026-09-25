@@ -49,6 +49,8 @@ interface SyncConfig {
   owner: string;
   repoName: string;
   branch: string;
+  gitName?: string;
+  gitEmail?: string;
   supabaseConnectionString: string;
   supabasePreviewConnectionString?: string;
   vercelUrl?: string;
@@ -134,6 +136,8 @@ export default function AdminGitHubSync() {
     owner: 'trungesuhai-maker',
     repoName: 'portfolio-shop-ALL',
     branch: 'main',
+    gitName: 'trungesuhai-maker',
+    gitEmail: 'trungesuhai@gmail.com',
     supabaseConnectionString: '',
     supabasePreviewConnectionString: '',
     vercelUrl: 'https://portfolio-shop.vercel.app',
@@ -251,6 +255,8 @@ export default function AdminGitHubSync() {
           repoName: data.repoName || prev.repoName,
           branch: data.branch || prev.branch,
           githubPat: data.githubPat || '',
+          gitName: data.gitName || prev.gitName || 'trungesuhai-maker',
+          gitEmail: data.gitEmail || prev.gitEmail || 'trungesuhai@gmail.com',
           supabaseConnectionString: data.supabaseConnectionString || '',
           supabasePreviewConnectionString: data.supabasePreviewConnectionString || '',
           vercelUrl: data.vercelUrl || prev.vercelUrl || 'https://portfolio-shop-all.vercel.app',
@@ -1252,6 +1258,40 @@ export default function AdminGitHubSync() {
                       value={config.vercelUrl}
                       onChange={e => setConfig({ ...config, vercelUrl: e.target.value })}
                       placeholder="https://portfolio-shop.vercel.app"
+                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white"
+                    />
+                  </div>
+                </div>
+
+                {/* Git Author Name & Git Author Email (Vercel Commit Matching) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                      Git Author Name
+                    </label>
+                    <input
+                      type="text"
+                      value={config.gitName || ''}
+                      onChange={e => setConfig({ ...config, gitName: e.target.value })}
+                      placeholder="trungesuhai-maker"
+                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                        Git Author Email (GitHub)
+                      </label>
+                      <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">
+                        VERCEL VERIFIED
+                      </span>
+                    </div>
+                    <input
+                      type="email"
+                      value={config.gitEmail || ''}
+                      onChange={e => setConfig({ ...config, gitEmail: e.target.value })}
+                      placeholder="trungesuhai@gmail.com"
                       className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white"
                     />
                   </div>

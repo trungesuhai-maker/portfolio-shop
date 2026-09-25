@@ -80,6 +80,8 @@ const DEFAULT_SYNC_CONFIG = {
   owner: process.env.GITHUB_OWNER || 'trungesuhai-maker',
   repoName: process.env.GITHUB_REPO || 'portfolio-shop-ALL',
   branch: process.env.GITHUB_BRANCH || 'main',
+  gitName: process.env.GIT_NAME || 'trungesuhai-maker',
+  gitEmail: process.env.GIT_EMAIL || 'trungesuhai@gmail.com',
   supabaseConnectionString: process.env.SUPABASE_CONNECTION_STRING || '',
   supabasePreviewConnectionString: process.env.SUPABASE_PREVIEW_CONNECTION_STRING || '',
   vercelUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.VITE_VERCEL_URL || 'https://portfolio-shop.vercel.app'),
@@ -1801,6 +1803,8 @@ ${urls.map(u => `  <url>
       repoName: SYNC_CONFIG.repoName,
       branch: SYNC_CONFIG.branch,
       githubPat: SYNC_CONFIG.githubPat,
+      gitName: SYNC_CONFIG.gitName || 'trungesuhai-maker',
+      gitEmail: SYNC_CONFIG.gitEmail || 'trungesuhai@gmail.com',
       supabaseConnectionString: SYNC_CONFIG.supabaseConnectionString,
       supabasePreviewConnectionString: SYNC_CONFIG.supabasePreviewConnectionString,
       vercelUrl: SYNC_CONFIG.vercelUrl || 'https://portfolio-shop.vercel.app',
@@ -1809,11 +1813,13 @@ ${urls.map(u => `  <url>
   });
 
   app.post("/api/admin/sync/config", requireAdmin, (req, res) => {
-    const { owner, repoName, branch, githubPat, supabaseConnectionString, supabasePreviewConnectionString, vercelUrl, vercelDeployHook } = req.body;
+    const { owner, repoName, branch, githubPat, gitName, gitEmail, supabaseConnectionString, supabasePreviewConnectionString, vercelUrl, vercelDeployHook } = req.body;
     if (owner !== undefined) SYNC_CONFIG.owner = String(owner).trim();
     if (repoName !== undefined) SYNC_CONFIG.repoName = String(repoName).trim();
     if (branch !== undefined) SYNC_CONFIG.branch = String(branch).trim();
     if (githubPat !== undefined) SYNC_CONFIG.githubPat = String(githubPat).trim();
+    if (gitName !== undefined) SYNC_CONFIG.gitName = String(gitName).trim();
+    if (gitEmail !== undefined) SYNC_CONFIG.gitEmail = String(gitEmail).trim();
     if (supabaseConnectionString !== undefined) SYNC_CONFIG.supabaseConnectionString = String(supabaseConnectionString).trim();
     if (supabasePreviewConnectionString !== undefined) SYNC_CONFIG.supabasePreviewConnectionString = String(supabasePreviewConnectionString).trim();
     if (vercelUrl !== undefined) SYNC_CONFIG.vercelUrl = String(vercelUrl).trim();
@@ -2040,6 +2046,8 @@ ${urls.map(u => `  <url>
       branch = 'main', 
       targetBranch = 'main', 
       githubPat, 
+      gitName = SYNC_CONFIG.gitName || owner || 'trungesuhai-maker',
+      gitEmail = SYNC_CONFIG.gitEmail || 'trungesuhai@gmail.com',
       supabaseConnectionString,
       supabasePreviewConnectionString,
       vercelDeployHook = SYNC_CONFIG.vercelDeployHook 
@@ -2117,8 +2125,8 @@ ${urls.map(u => `  <url>
         await execAsync(`git init -b ${targetBranch}`, { cwd: rootDir });
       }
 
-      await execAsync(`git config user.name "AI Studio Deployer"`, { cwd: rootDir });
-      await execAsync(`git config user.email "deploy@aistudio.build"`, { cwd: rootDir });
+      await execAsync(`git config user.name "${gitName}"`, { cwd: rootDir });
+      await execAsync(`git config user.email "${gitEmail}"`, { cwd: rootDir });
 
       const remoteUrl = `https://x-access-token:${githubPat}@github.com/${owner}/${repoName}.git`;
       
@@ -2131,10 +2139,11 @@ ${urls.map(u => `  <url>
       append(`[GIT] Đang lập chỉ mục các tệp thay đổi (git add -A)...`, 'git');
       await execAsync(`git add -A`, { cwd: rootDir });
 
+      const commitAuthor = `${gitName} <${gitEmail}>`;
       const commitMsg = `feat(deploy): Atomic sync from AI Studio [${new Date().toISOString()}]`;
-      append(`[GIT] Tạo commit: "${commitMsg}"...`, 'git');
+      append(`[GIT] Tạo commit: "${commitMsg}" (Tác giả: ${commitAuthor})...`, 'git');
       try {
-        await execAsync(`git commit -m "${commitMsg}" --allow-empty`, { cwd: rootDir });
+        await execAsync(`git commit -m "${commitMsg}" --author="${commitAuthor}" --allow-empty`, { cwd: rootDir });
       } catch (commitErr: any) {
         // Nothing to commit or minor warning
       }

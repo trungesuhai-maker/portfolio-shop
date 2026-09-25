@@ -52,6 +52,7 @@ interface SyncConfig {
   supabaseConnectionString: string;
   supabasePreviewConnectionString?: string;
   vercelUrl?: string;
+  vercelDeployHook?: string;
 }
 
 interface CapacitorStatus {
@@ -131,11 +132,12 @@ export default function AdminGitHubSync() {
   const [config, setConfig] = useState<SyncConfig>({
     githubPat: '',
     owner: 'trungesuhai-maker',
-    repoName: 'portfolio-shop',
+    repoName: 'portfolio-shop-ALL',
     branch: 'main',
     supabaseConnectionString: '',
     supabasePreviewConnectionString: '',
-    vercelUrl: 'https://portfolio-shop.vercel.app'
+    vercelUrl: 'https://portfolio-shop.vercel.app',
+    vercelDeployHook: ''
   });
 
   const [envVars, setEnvVars] = useState<EnvConfig>({
@@ -251,7 +253,8 @@ export default function AdminGitHubSync() {
           githubPat: data.githubPat || '',
           supabaseConnectionString: data.supabaseConnectionString || '',
           supabasePreviewConnectionString: data.supabasePreviewConnectionString || '',
-          vercelUrl: data.vercelUrl || prev.vercelUrl || 'https://portfolio-shop-all.vercel.app'
+          vercelUrl: data.vercelUrl || prev.vercelUrl || 'https://portfolio-shop-all.vercel.app',
+          vercelDeployHook: data.vercelDeployHook || prev.vercelDeployHook || ''
         }));
       }
     } catch (e) {
@@ -1252,6 +1255,28 @@ export default function AdminGitHubSync() {
                       className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white"
                     />
                   </div>
+                </div>
+
+                {/* Vercel Deploy Hook (Tùy chọn - Kích hoạt build tức thì 100%) */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Vercel Deploy Hook URL (Tùy chọn - Ép Vercel build tức thì 100%)
+                    </label>
+                    <span className="text-[10px] bg-purple-100 text-purple-800 font-bold px-1.5 py-0.5 rounded">
+                      INSTANT TRIGGER
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    value={config.vercelDeployHook || ''}
+                    onChange={e => setConfig({ ...config, vercelDeployHook: e.target.value })}
+                    placeholder="https://api.vercel.com/v1/integrations/deploy/prj_.../..."
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white font-mono text-xs"
+                  />
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    💡 <b>Cách lấy trong 30 giây:</b> Trên Vercel $\rightarrow$ Settings $\rightarrow$ Git $\rightarrow$ Deploy Hooks $\rightarrow$ Tạo hook (nhánh main) và dán link vào đây. Mỗi khi bấm Deploy, Vercel sẽ tự động build ngay lập tức mà không cần lo lắng về webhook GitHub.
+                  </p>
                 </div>
 
                 {/* Supabase Production Connection String */}

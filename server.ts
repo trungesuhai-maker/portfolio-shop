@@ -78,11 +78,12 @@ let R2_CONFIG = loadObjectFromDisk('r2-config.json', DEFAULT_R2_CONFIG);
 const DEFAULT_SYNC_CONFIG = {
   githubPat: process.env.GITHUB_PAT || '',
   owner: process.env.GITHUB_OWNER || 'trungesuhai-maker',
-  repoName: process.env.GITHUB_REPO || 'portfolio-shop',
+  repoName: process.env.GITHUB_REPO || 'portfolio-shop-ALL',
   branch: process.env.GITHUB_BRANCH || 'main',
   supabaseConnectionString: process.env.SUPABASE_CONNECTION_STRING || '',
   supabasePreviewConnectionString: process.env.SUPABASE_PREVIEW_CONNECTION_STRING || '',
-  vercelUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.VITE_VERCEL_URL || 'https://portfolio-shop.vercel.app')
+  vercelUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.VITE_VERCEL_URL || 'https://portfolio-shop.vercel.app'),
+  vercelDeployHook: process.env.VERCEL_DEPLOY_HOOK || ''
 };
 let SYNC_CONFIG = loadObjectFromDisk('sync-config.json', DEFAULT_SYNC_CONFIG);
 
@@ -1802,12 +1803,13 @@ ${urls.map(u => `  <url>
       githubPat: SYNC_CONFIG.githubPat,
       supabaseConnectionString: SYNC_CONFIG.supabaseConnectionString,
       supabasePreviewConnectionString: SYNC_CONFIG.supabasePreviewConnectionString,
-      vercelUrl: SYNC_CONFIG.vercelUrl || 'https://portfolio-shop.vercel.app'
+      vercelUrl: SYNC_CONFIG.vercelUrl || 'https://portfolio-shop.vercel.app',
+      vercelDeployHook: SYNC_CONFIG.vercelDeployHook || ''
     });
   });
 
   app.post("/api/admin/sync/config", requireAdmin, (req, res) => {
-    const { owner, repoName, branch, githubPat, supabaseConnectionString, supabasePreviewConnectionString, vercelUrl } = req.body;
+    const { owner, repoName, branch, githubPat, supabaseConnectionString, supabasePreviewConnectionString, vercelUrl, vercelDeployHook } = req.body;
     if (owner !== undefined) SYNC_CONFIG.owner = String(owner).trim();
     if (repoName !== undefined) SYNC_CONFIG.repoName = String(repoName).trim();
     if (branch !== undefined) SYNC_CONFIG.branch = String(branch).trim();
@@ -1815,6 +1817,7 @@ ${urls.map(u => `  <url>
     if (supabaseConnectionString !== undefined) SYNC_CONFIG.supabaseConnectionString = String(supabaseConnectionString).trim();
     if (supabasePreviewConnectionString !== undefined) SYNC_CONFIG.supabasePreviewConnectionString = String(supabasePreviewConnectionString).trim();
     if (vercelUrl !== undefined) SYNC_CONFIG.vercelUrl = String(vercelUrl).trim();
+    if (vercelDeployHook !== undefined) SYNC_CONFIG.vercelDeployHook = String(vercelDeployHook).trim();
 
     try {
       fs.writeFileSync(path.join(DATA_DIR, 'sync-config.json'), JSON.stringify(SYNC_CONFIG, null, 2), 'utf-8');
@@ -2038,7 +2041,8 @@ ${urls.map(u => `  <url>
       targetBranch = 'main', 
       githubPat, 
       supabaseConnectionString,
-      supabasePreviewConnectionString 
+      supabasePreviewConnectionString,
+      vercelDeployHook = SYNC_CONFIG.vercelDeployHook 
     } = req.body;
     const logs: Array<{ message: string; type: 'info' | 'success' | 'warning' | 'error' | 'git' | 'db' }> = [];
 
@@ -2142,7 +2146,36 @@ ${urls.map(u => `  <url>
       }
 
       append(`[GIT] Push thành công lên GitHub repo ${owner}/${repoName}!`, 'success');
-      append(`[VERCEL] Webhook Vercel đã được kích hoạt tự động từ commit mới trên nhánh ${targetBranch}.`, 'success');
+
+      // Dual-sync to ensure both portfolio-shop-ALL and portfolio-shop are always up to date
+      const siblingRepo = repoName === 'portfolio-shop' ? 'portfolio-shop-ALL' : (repoName === 'portfolio-shop-ALL' ? 'portfolio-shop' : null);
+      if (siblingRepo && githubPat) {
+        try {
+          append(`[GIT DUAL-SYNC] Đang đồng bộ tức thì sang repo liên kết Vercel: ${owner}/${siblingRepo}...`, 'git');
+          const siblingUrl = `https://x-access-token:${githubPat}@github.com/${owner}/${siblingRepo}.git`;
+          await execAsync(`git push ${siblingUrl} ${targetBranch} --force`, { cwd: rootDir });
+          append(`[GIT DUAL-SYNC] ✅ Đã đồng bộ 100% sang cả repo ${owner}/${siblingRepo}!`, 'success');
+        } catch (siblingErr: any) {
+          // Non-fatal
+        }
+      }
+
+      if (vercelDeployHook && typeof vercelDeployHook === 'string' && vercelDeployHook.startsWith('http')) {
+        try {
+          append(`[VERCEL] Đang kích hoạt Vercel Deploy Hook trực tiếp...`, 'info');
+          const hookRes = await fetch(vercelDeployHook, { method: 'POST' });
+          if (hookRes.ok) {
+            append(`[VERCEL] ✅ Kích hoạt Vercel Deploy Hook thành công! Vercel đã nhận lệnh và bắt đầu build ngay bây giờ.`, 'success');
+          } else {
+            append(`[VERCEL] Cảnh báo: Vercel Deploy Hook trả về HTTP ${hookRes.status}. Vui lòng kiểm tra lại URL Hook.`, 'warning');
+          }
+        } catch (hErr: any) {
+          append(`[VERCEL] Lỗi kích hoạt Deploy Hook: ${hErr.message}`, 'warning');
+        }
+      } else {
+        append(`[VERCEL] Webhook Vercel tự động lắng nghe từ commit mới trên nhánh ${targetBranch}.`, 'info');
+      }
+
       append(`[VERCEL] Môi trường public tên miền thật sẽ tự động hoàn tất build trong 60-90 giây!`, 'success');
       append(`[CAPACITOR OTA] ⚡ Cơ chế Live-Update tức thì: Toàn bộ thiết bị Android (file APK đã cài đặt) sẽ tự động nạp giao diện, tính năng và dữ liệu mới nhất mà KHÔNG CẦN cài lại file APK!`, 'success');
 

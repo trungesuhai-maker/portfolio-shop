@@ -3877,6 +3877,15 @@ ${urls.map(u => `  <url>
     }
   });
 
+  app.get('/portfolio-shop-full.zip', (req, res) => {
+    const zipPath = path.join(process.cwd(), 'public', 'portfolio-shop-full.zip');
+    if (fs.existsSync(zipPath)) {
+      res.download(zipPath, 'portfolio-shop-full.zip');
+    } else {
+      res.status(404).send('ZIP file not found');
+    }
+  });
+
   // ==========================================
   // Vite / Static Middleware
   // ==========================================

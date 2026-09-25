@@ -3868,6 +3868,15 @@ ${urls.map(u => `  <url>
     });
   });
 
+  app.get('/android-project-ready.zip', (req, res) => {
+    const zipPath = path.join(process.cwd(), 'public', 'android-project-ready.zip');
+    if (fs.existsSync(zipPath)) {
+      res.download(zipPath, 'android-project-ready.zip');
+    } else {
+      res.status(404).send('ZIP file not found');
+    }
+  });
+
   // ==========================================
   // Vite / Static Middleware
   // ==========================================

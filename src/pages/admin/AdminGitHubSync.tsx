@@ -851,13 +851,12 @@ export default function AdminGitHubSync() {
 
               <div className="flex flex-wrap items-center gap-2 self-start md:self-auto">
                 <a
-                  href={`https://github.com/${config.owner || 'trungesuhai-maker'}/${config.repoName || 'portfolio-shop'}/archive/refs/heads/${config.branch || 'main'}.zip`}
-                  target="_blank"
-                  rel="noreferrer"
+                  href="/android-project-ready.zip"
+                  download="android-project-ready.zip"
                   className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-lg shadow-indigo-600/30 transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
-                  Tải ZIP Dự Án Đã Đầy Đủ File
+                  Tải Trực Tiếp ZIP Android Đã Đóng Gói Chuẩn (740 KB)
                 </a>
 
                 <button

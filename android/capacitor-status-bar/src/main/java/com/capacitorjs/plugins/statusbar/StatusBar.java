@@ -118,13 +118,15 @@ public class StatusBar {
         listener.onChange(statusBarOverlayChanged, getInfo());
     }
 
+    private static final int API_VANILLA_ICE_CREAM = 35;
+
     private boolean shouldSetStatusBarColor(boolean hasOptOut) {
         boolean canSetStatusBar;
         int deviceApi = Build.VERSION.SDK_INT;
-        if (deviceApi < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        if (deviceApi < API_VANILLA_ICE_CREAM) {
             // device below Android 15 - can always set status bar
             canSetStatusBar = true;
-        } else if (deviceApi == Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        } else if (deviceApi == API_VANILLA_ICE_CREAM) {
             canSetStatusBar = hasOptOut; // app targets 15 - can set status bar if opted out
         } else {
             canSetStatusBar = false; // app targets 16 - opt-out ignored or app targets 15 but there is not opt out
@@ -133,10 +135,16 @@ public class StatusBar {
     }
 
     private boolean isEdgeToEdgeOptOutEnabled(Window window) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            TypedValue value = new TypedValue();
-            window.getContext().getTheme().resolveAttribute(android.R.attr.windowOptOutEdgeToEdgeEnforcement, value, true);
-            return value.data != 0; // value is set to -1 on true as of Android 15, so we have to do this.
+        if (Build.VERSION.SDK_INT >= API_VANILLA_ICE_CREAM) {
+            try {
+                int attrId = window.getContext().getResources().getIdentifier("windowOptOutEdgeToEdgeEnforcement", "attr", "android");
+                if (attrId != 0) {
+                    TypedValue value = new TypedValue();
+                    window.getContext().getTheme().resolveAttribute(attrId, value, true);
+                    return value.data != 0;
+                }
+            } catch (Exception ignored) {
+            }
         }
         return false;
     }

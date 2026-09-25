@@ -769,9 +769,55 @@ export const api = {
   },
   settings: {
     getPublic: async (): Promise<ShopSettings> => {
-      const res = await fetch('/api/settings');
-      if (!res.ok) throw new Error('Failed to fetch public shop settings');
-      return await res.json();
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const contentType = res.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            return await res.json();
+          }
+        }
+      } catch (e) {}
+      return {
+        shopName: "Portio — AI Studio Portfolio Shop",
+        tagline: "Khởi tạo Portfolio chuẩn quốc tế trong 60 giây",
+        logo: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop",
+        favicon: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=64&h=64&fit=crop",
+        contact: {
+          email: "support@portio.dev",
+          phone: "+84 (0) 901 234 567",
+          address: "Khu Công Nghệ Cao, TP. Thủ Đức, TP. Hồ Chí Minh",
+          workingHours: "Thứ Hai - Thứ Bảy: 08:00 - 18:00 (UTC+7)"
+        },
+        socialLinks: {
+          twitter: "https://x.com/portioshop",
+          github: "https://github.com/portio-marketplace",
+          linkedin: "https://linkedin.com/company/portio-dev",
+          discord: "https://discord.gg/portio",
+          facebook: "https://facebook.com/portio.official",
+          youtube: "https://youtube.com/@portiodev"
+        },
+        footer: {
+          copyrightText: "© 2026 Portio. Nền tảng Portfolio AI Studio phân tán với CDN toàn cầu.",
+          aboutText: "Chợ Portfolio Template được thiết kế riêng cho các dự án AI Studio. Hỗ trợ kết nối subdomain wildcard, cách ly dữ liệu tuyệt đối và phân phối qua Cloudflare Edge.",
+          links: [
+            { label: "Về chúng tôi", url: "/about" },
+            { label: "Chính sách bảo mật", url: "/privacy" },
+            { label: "Điều khoản dịch vụ", url: "/terms" },
+            { label: "Tài liệu API", url: "/docs" }
+          ]
+        },
+        brandColors: {
+          primary: "#4f46e5",
+          accent: "#06b6d4",
+          background: "#f8fafc",
+          text: "#0f172a"
+        },
+        maintenanceMode: false,
+        currency: 'USD',
+        currencySymbol: '$',
+        sandboxMode: false
+      };
     }
   }
 };

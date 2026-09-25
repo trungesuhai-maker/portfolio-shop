@@ -68,8 +68,11 @@ export function PublicLayout() {
     return () => { mounted = false; };
   }, [location.pathname]);
 
-  const shopName = settings?.shopName || 'Portio';
-  const logoUrl = settings?.logo;
+  const DEFAULT_SHOP_NAME = 'Portio — AI Studio Portfolio Shop';
+  const DEFAULT_LOGO_URL = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop';
+
+  const shopName = settings?.shopName || DEFAULT_SHOP_NAME;
+  const logoUrl = settings?.logo || DEFAULT_LOGO_URL;
   const isMaintenance = settings?.maintenanceMode && !isAdmin;
 
   return (

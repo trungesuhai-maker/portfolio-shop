@@ -1,0 +1,12 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+data/sync-config.json
+data/r2-config.json
+data/backups/
+*.bak

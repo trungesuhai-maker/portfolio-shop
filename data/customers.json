@@ -1,0 +1,22 @@
+[
+  {
+    "id": "usr-1",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "customer",
+    "createdAt": "2026-08-10T10:00:00Z",
+    "status": "active",
+    "ordersCount": 1,
+    "portfoliosCount": 1
+  },
+  {
+    "id": "usr-2",
+    "name": "Anna Taylor",
+    "email": "anna@taylor.design",
+    "role": "customer",
+    "createdAt": "2026-08-15T12:30:00Z",
+    "status": "active",
+    "ordersCount": 1,
+    "portfoliosCount": 1
+  }
+]

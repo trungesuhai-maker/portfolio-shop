@@ -1,0 +1,50 @@
+[
+  {
+    "id": "inst-john",
+    "user_id": "usr-1",
+    "template_id": "project-a-designer",
+    "name": "John Doe Engineering",
+    "subdomain": "john",
+    "status": "published",
+    "created_at": "2026-09-01T10:00:00Z",
+    "updated_at": "2026-09-16T15:00:00Z",
+    "custom_data": {
+      "hero_title": "John Doe",
+      "hero_subtitle": "Principal Full Stack & Distributed Systems Engineer",
+      "design_philosophy": "Simplicity is subtracting the obvious and adding the meaningful.",
+      "primary_color": "#4f46e5"
+    },
+    "seo": {
+      "title": "John Doe — Principal Full Stack & Distributed Systems Engineer",
+      "description": "Senior Software Engineer specializing in scalable edge systems, TypeScript, and microservice architectures.",
+      "ogImage": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&h=630&fit=crop",
+      "favicon": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&fit=crop",
+      "canonical": "https://john.portfolio-shop.com",
+      "keywords": "fullstack engineer, edge computing, portfolio, react"
+    }
+  },
+  {
+    "id": "inst-anna",
+    "user_id": "usr-2",
+    "template_id": "project-b-photographer",
+    "name": "Anna Taylor Visual Design",
+    "subdomain": "anna",
+    "status": "published",
+    "created_at": "2026-09-05T14:20:00Z",
+    "updated_at": "2026-09-16T12:00:00Z",
+    "custom_data": {
+      "hero_title": "Anna Taylor",
+      "hero_subtitle": "Lead Visual Designer & Creative Art Director",
+      "design_philosophy": "Typography speaks louder than words when shaped with clear intention.",
+      "primary_color": "#06b6d4"
+    },
+    "seo": {
+      "title": "Anna Taylor — Lead Visual Designer & Creative Art Director",
+      "description": "Award-winning Visual Designer and Art Director creating memorable digital identities, brand experiences, and design systems.",
+      "ogImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&h=630&fit=crop",
+      "favicon": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=64&h=64&fit=crop",
+      "canonical": "https://anna.portfolio-shop.com",
+      "keywords": "visual designer, creative director, branding, ui/ux"
+    }
+  }
+]

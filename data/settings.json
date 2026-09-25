@@ -1,0 +1,92 @@
+{
+  "shopName": "Portio — AI Studio Portfolio Shop",
+  "tagline": "Khởi tạo Portfolio chuẩn quốc tế trong 60 giây",
+  "logo": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop",
+  "favicon": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=64&h=64&fit=crop",
+  "contact": {
+    "email": "support@portio.dev",
+    "phone": "+84 (0) 901 234 567",
+    "address": "Khu Công Nghệ Cao, TP. Thủ Đức, TP. Hồ Chí Minh",
+    "workingHours": "Thứ Hai - Thứ Bảy: 08:00 - 18:00 (UTC+7)"
+  },
+  "socialLinks": {
+    "twitter": "https://x.com/portioshop",
+    "github": "https://github.com/portio-marketplace",
+    "linkedin": "https://linkedin.com/company/portio-dev",
+    "discord": "https://discord.gg/portio",
+    "facebook": "https://facebook.com/portio.official",
+    "youtube": "https://youtube.com/@portiodev"
+  },
+  "footer": {
+    "copyright": "© 2026 Portio. Nền tảng Portfolio AI Studio phân tán với CDN toàn cầu.",
+    "aboutText": "Chợ Portfolio Template được thiết kế riêng cho các dự án AI Studio. Hỗ trợ kết nối subdomain wildcard, cách ly dữ liệu tuyệt đối và phân phối qua Cloudflare Edge.",
+    "links": [
+      {
+        "label": "Về chúng tôi",
+        "url": "/about"
+      },
+      {
+        "label": "Chính sách bảo mật",
+        "url": "/privacy"
+      },
+      {
+        "label": "Điều khoản dịch vụ",
+        "url": "/terms"
+      },
+      {
+        "label": "Tài liệu API",
+        "url": "/docs"
+      }
+    ]
+  },
+  "brandColors": {
+    "primary": "#4f46e5",
+    "accent": "#06b6d4",
+    "background": "#f8fafc",
+    "text": "#0f172a"
+  },
+  "homepage": {
+    "heroBadge": "Hạ tầng Edge Subdomain Phân Tán",
+    "heroTitle": "Xây dựng & Sở hữu Portfolio Đẳng Cấp trong 60 Giây",
+    "heroSubtitle": "Lựa chọn các Template AI Studio độc lập được tuyển chọn kỹ lưỡng. Tự động kích hoạt Subdomain cá nhân và triển khai toàn cầu tức thì.",
+    "heroImage": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop",
+    "ctaHeading": "Sẵn sàng nâng tầm thương hiệu cá nhân của bạn?",
+    "ctaSubtitle": "Gia nhập hơn 12,000 lập trình viên và nhà thiết kế đang dùng Portio để gây ấn tượng với nhà tuyển dụng.",
+    "ctaButtonText": "Khám phá Kho Template Ngay",
+    "ctaButtonLink": "/templates"
+  },
+  "seo": {
+    "metaTitle": "Portio — Chợ Portfolio Templates Đẳng Cấp cho Creators & Developers",
+    "metaDescription": "Khám phá và khởi tạo portfolio đỉnh cao trong 60 giây với Cloudflare Edge Subdomains và AI Studio Integration. Tối ưu SEO, thiết kế đáp ứng và chuẩn quốc tế.",
+    "keywords": "portfolio templates, ai studio portfolio, developer cv, designer website, edge portfolios, resume builder",
+    "ogImage": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&h=630&fit=crop",
+    "canonicalUrl": "https://portfolio-shop.com",
+    "robotsIndexing": true,
+    "robotsCustom": "User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\nSitemap: https://portfolio-shop.com/sitemap.xml",
+    "sitemapEnabled": true
+  },
+  "analytics": {
+    "googleAnalyticsId": "G-PORTIO8899",
+    "facebookPixelId": "FP-8822001144",
+    "googleTagManagerId": "GTM-PORTIO01",
+    "customHeadScript": "<!-- Google Tag Manager & Portio Edge Analytics -->"
+  },
+  "maintenance": {
+    "enabled": false,
+    "title": "Hệ thống đang bảo trì định kỳ",
+    "message": "Chúng tôi đang nâng cấp hạ tầng mạng Cloudflare Edge để mang lại tốc độ tải trang nhanh hơn. Vui lòng quay lại sau ít phút!",
+    "allowAdminBypass": true
+  },
+  "currency": "USD",
+  "currencySymbol": "$",
+  "sandboxMode": true,
+  "stripeEnabled": true,
+  "vnpayEnabled": true,
+  "payosEnabled": false,
+  "enableStripe": true,
+  "enableVNPay": true,
+  "enablePayOS": false,
+  "maintenanceMode": false,
+  "platformFeePercent": 10,
+  "allowCustomDomains": true
+}

@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  
+  --color-brand-50: #fffbeb;
+  --color-brand-100: #fef3c7;
+  --color-brand-400: #fbbf24;
+  --color-brand-500: #f59e0b;
+  --color-brand-600: #d97706;
+  --color-brand-900: #78350f;
+
+  --color-pastel-pink: #fdf2f8;
+  --color-pastel-purple: #f5f3ff;
+  --color-pastel-orange: #fff7ed;
+  --color-pastel-blue: #f0f9ff;
+  --color-pastel-green: #ecfdf5;
+
+  --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+  --shadow-soft-md: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+  --shadow-soft-lg: 0 30px 60px -15px rgba(0, 0, 0, 0.1);
+}
+
+@layer base {
+  *, ::before, ::after {
+    font-family: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  }
+  html, body {
+    @apply bg-[#FFFCF9] text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white;
+    font-family: "Nunito", ui-sans-serif, system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  input, textarea, select, button {
+    font-family: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  }
+}
+
+/* Safe-area insets for mobile native notches & bars */
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.safe-area-top {
+  margin-top: env(safe-area-inset-top, 0px);
+}
+.safe-area-bottom {
+  margin-bottom: env(safe-area-inset-bottom, 0px);
+}
+

@@ -325,7 +325,7 @@ RETURNS BOOLEAN AS $$
 BEGIN
   RETURN EXISTS (
     SELECT 1 FROM public.profiles 
-    WHERE id = auth.uid() AND role IN ('admin', 'superadmin')
+    WHERE id = auth.uid()::text AND role IN ('admin', 'superadmin')
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -335,7 +335,7 @@ DROP POLICY IF EXISTS "Public can view basic profiles" ON public.profiles;
 CREATE POLICY "Public can view basic profiles" ON public.profiles FOR SELECT USING (true);
 
 DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
-CREATE POLICY "Users can update their own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Users can update their own profile" ON public.profiles FOR UPDATE USING (auth.uid()::text = id);
 
 -- --- POLICIES: CATEGORIES & TEMPLATES ---
 DROP POLICY IF EXISTS "Public read categories" ON public.categories;
@@ -349,17 +349,17 @@ CREATE POLICY "Admins full access templates" ON public.templates FOR ALL USING (
 
 -- --- POLICIES: PORTFOLIO INSTANCES ---
 DROP POLICY IF EXISTS "Public view published portfolios" ON public.portfolio_instances;
-CREATE POLICY "Public view published portfolios" ON public.portfolio_instances FOR SELECT USING (status = 'published' OR user_id = auth.uid() OR public.is_admin());
+CREATE POLICY "Public view published portfolios" ON public.portfolio_instances FOR SELECT USING (status = 'published' OR user_id = auth.uid()::text OR public.is_admin());
 
 DROP POLICY IF EXISTS "Users manage their own portfolios" ON public.portfolio_instances;
-CREATE POLICY "Users manage their own portfolios" ON public.portfolio_instances FOR ALL USING (user_id = auth.uid() OR public.is_admin());
+CREATE POLICY "Users manage their own portfolios" ON public.portfolio_instances FOR ALL USING (user_id = auth.uid()::text OR public.is_admin());
 
 -- --- POLICIES: ORDERS & PAYMENTS ---
 DROP POLICY IF EXISTS "Anyone can create orders" ON public.orders;
 CREATE POLICY "Anyone can create orders" ON public.orders FOR INSERT WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Users view their own orders" ON public.orders;
-CREATE POLICY "Users view their own orders" ON public.orders FOR SELECT USING (user_id = auth.uid() OR public.is_admin());
+CREATE POLICY "Users view their own orders" ON public.orders FOR SELECT USING (user_id = auth.uid()::text OR public.is_admin());
 
 DROP POLICY IF EXISTS "Admins full access orders" ON public.orders;
 CREATE POLICY "Admins full access orders" ON public.orders FOR ALL USING (public.is_admin());
@@ -370,7 +370,7 @@ CREATE POLICY "Public read active domains" ON public.domains FOR SELECT USING (s
 
 DROP POLICY IF EXISTS "Users manage their domains" ON public.domains;
 CREATE POLICY "Users manage their domains" ON public.domains FOR ALL USING (
-  EXISTS (SELECT 1 FROM public.portfolio_instances WHERE id = domains.portfolio_id AND (user_id = auth.uid() OR public.is_admin()))
+  EXISTS (SELECT 1 FROM public.portfolio_instances WHERE id = domains.portfolio_id AND (user_id = auth.uid()::text OR public.is_admin()))
 );
 
 -- --- POLICIES: STORAGE ASSETS & SETTINGS ---

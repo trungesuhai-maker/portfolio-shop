@@ -251,7 +251,7 @@ export default function AdminGitHubSync() {
           githubPat: data.githubPat || '',
           supabaseConnectionString: data.supabaseConnectionString || '',
           supabasePreviewConnectionString: data.supabasePreviewConnectionString || '',
-          vercelUrl: data.vercelUrl || prev.vercelUrl || 'https://portfolio-shop.vercel.app'
+          vercelUrl: data.vercelUrl || prev.vercelUrl || 'https://portfolio-shop-all.vercel.app'
         }));
       }
     } catch (e) {

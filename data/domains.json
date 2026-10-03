@@ -1,0 +1,24 @@
+[
+  {
+    "id": "dom-john",
+    "portfolioId": "inst-john",
+    "subdomain": "john",
+    "fullDomain": "john.portfolio-shop.com",
+    "customDomain": "john.design",
+    "status": "active",
+    "sslStatus": "valid",
+    "verified": true,
+    "createdAt": "2026-09-01T10:00:00Z"
+  },
+  {
+    "id": "dom-anna",
+    "portfolioId": "inst-anna",
+    "subdomain": "anna",
+    "fullDomain": "anna.portfolio-shop.com",
+    "customDomain": "anna.art",
+    "status": "active",
+    "sslStatus": "valid",
+    "verified": true,
+    "createdAt": "2026-09-05T14:20:00Z"
+  }
+]

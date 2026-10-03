@@ -1,0 +1,28 @@
+[
+  {
+    "id": "usr-admin",
+    "email": "admin@portio.com",
+    "passwordHash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+    "fullName": "Admin Manager",
+    "role": "admin",
+    "created_at": "2026-09-29T01:55:47.385Z",
+    "user_metadata": {
+      "full_name": "Admin Manager",
+      "role": "admin"
+    }
+  },
+  {
+    "id": "usr-1790646961607-64e915",
+    "email": "testuser@gmail.com",
+    "passwordHash": "6e659deaa85842cdabb5c6305fcc40033ba43772ec00d45c2a3c921741a5e377",
+    "fullName": "Test Real User",
+    "phone": "",
+    "role": "customer",
+    "created_at": "2026-09-29T01:56:01.607Z",
+    "user_metadata": {
+      "full_name": "Test Real User",
+      "name": "Test Real User",
+      "role": "customer"
+    }
+  }
+]

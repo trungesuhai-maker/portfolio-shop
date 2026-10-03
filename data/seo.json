@@ -1,0 +1,12 @@
+{
+  "metaTitle": "Portio — Chợ Portfolio Templates Đẳng Cấp cho Creators & Developers",
+  "metaDescription": "Khám phá và khởi tạo portfolio đỉnh cao trong 60 giây với Cloudflare Edge Subdomains và AI Studio Integration. Tối ưu SEO, thiết kế đáp ứng và chuẩn quốc tế.",
+  "keywords": "portfolio templates, ai studio portfolio, developer cv, designer website, edge portfolios, resume builder",
+  "ogImageUrl": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&h=630&fit=crop",
+  "ogImage": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&h=630&fit=crop",
+  "canonicalUrl": "https://portfolio-shop.com",
+  "googleAnalyticsId": "G-PORTIO8899",
+  "sitemapEnabled": true,
+  "robotsIndexing": true,
+  "robotsCustom": "User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\nSitemap: https://portfolio-shop.com/sitemap.xml"
+}

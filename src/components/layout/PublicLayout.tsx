@@ -14,7 +14,7 @@ export function PublicLayout() {
   const location = useLocation();
   const isAuthPage = location.pathname.startsWith('/auth');
   const { t } = useLanguage();
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, logout } = useAuth();
   const [settings, setSettings] = useState<ShopSettings | null>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -194,11 +194,7 @@ export function PublicLayout() {
                   </Link>
 
                   <button
-                    onClick={() => {
-                      localStorage.removeItem('auth_user');
-                      localStorage.removeItem('demo_auth');
-                      window.location.href = '/';
-                    }}
+                    onClick={logout}
                     className="px-2.5 sm:px-3 py-1.5 text-xs font-semibold text-slate-500 hover:text-red-600 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
                     title="Đăng xuất khỏi tài khoản"
                   >

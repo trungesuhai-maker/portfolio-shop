@@ -98,12 +98,13 @@ export default function TemplateDetail() {
       toast.info('Bạn đã sở hữu template này rồi!');
       return;
     }
+    const checkoutPath = `/checkout?slug=${template.slug}&templateId=${template.id}&amount=${template.salePrice || template.price}`;
     if (!user) {
-      toast.info('Vui lòng đăng nhập để sở hữu template này!');
-      navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`);
+      toast.info('Vui lòng đăng ký tài khoản để sở hữu template này!');
+      navigate(`/auth/register?returnUrl=${encodeURIComponent(checkoutPath)}`);
       return;
     }
-    navigate(`/checkout?slug=${template.slug}&templateId=${template.id}&amount=${template.salePrice || template.price}`);
+    navigate(checkoutPath);
   };
 
   const handleCopyUrl = (url: string) => {
@@ -345,8 +346,7 @@ export default function TemplateDetail() {
                       className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
                       title="Mở bảng điều khiển quản trị template của bạn"
                     >
-                      <Terminal className="w-4 h-4 text-indigo-200" />
-                      <span>Quản Trị Template</span>
+                      <span>Quản lý template</span>
                     </a>
 
                     <a

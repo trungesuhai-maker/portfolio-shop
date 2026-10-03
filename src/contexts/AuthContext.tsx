@@ -8,6 +8,7 @@ interface AuthContextType {
   isLoading: boolean;
   isAdmin: boolean;
   updateProfile: (updates: { full_name?: string; phone?: string; username?: string; [key: string]: any }) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
   isAdmin: false,
   updateProfile: async () => {},
+  logout: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -96,11 +98,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('auth_user', JSON.stringify(updatedUser));
   };
 
+  const logout = async () => {
+    localStorage.removeItem('auth_user');
+    localStorage.removeItem('demo_auth');
+    localStorage.removeItem('token');
+    setUser(null);
+    setSession(null);
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {}
+    window.location.href = '/';
+  };
+
   // For architectural purposes, assume user with specific metadata is admin or demo session
   const isAdmin = user?.user_metadata?.role === 'admin' || localStorage.getItem('demo_auth') === 'true';
 
   return (
-    <AuthContext.Provider value={{ user, session, isLoading, isAdmin, updateProfile }}>
+    <AuthContext.Provider value={{ user, session, isLoading, isAdmin, updateProfile, logout }}>
       {children}
     </AuthContext.Provider>
   );

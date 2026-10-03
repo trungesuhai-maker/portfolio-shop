@@ -61,7 +61,7 @@ export default function DashboardOverview() {
       </div>
 
       {/* Overview Stat Cards (p-6, text >= 14px, no shadow) */}
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid sm:grid-cols-2 gap-6">
         <div className="p-6 bg-white border border-slate-200/90 rounded-2xl space-y-1">
           <h3 className="text-[14px] font-bold text-slate-500 uppercase tracking-wider">{t('dash.overview.active')}</h3>
           <p className="text-[32px] font-black text-emerald-600 tracking-tight">{activeCount}</p>
@@ -76,12 +76,6 @@ export default function DashboardOverview() {
             {username}.webcuaban.site
           </p>
           <span className="text-[14px] text-emerald-600 font-bold inline-block">{t('dash.overview.statusActive')}</span>
-        </div>
-
-        <div className="p-6 bg-white border border-slate-200/90 rounded-2xl space-y-1">
-          <h3 className="text-[14px] font-bold text-slate-500 uppercase tracking-wider">{t('dash.overview.security')}</h3>
-          <p className="text-[18px] font-bold text-slate-900 mt-2">Cloudflare Edge</p>
-          <span className="text-[14px] text-slate-500 font-medium inline-block">SSL 256-Bit Encrypted</span>
         </div>
       </div>
 

@@ -220,39 +220,57 @@ export default function MyPortfolios() {
           />
         </div>
 
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <span className="text-[14px] font-bold text-slate-600 flex items-center gap-1.5">
-            <Filter className="w-4 h-4" /> {t('dash.myPortfolios.filter')}
-          </span>
+        {/* 3 Tabs Filter styled like Image 4 (Modern Segmented Control) */}
+        <div className="inline-flex items-center p-1 bg-slate-100/90 rounded-2xl border border-slate-200/80 gap-1 w-fit">
           <button
             onClick={() => setStatusFilter('all')}
-            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-colors cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[14px] transition-all cursor-pointer ${
               statusFilter === 'all'
-                ? 'bg-slate-900 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-white text-indigo-700 font-black shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 font-bold hover:bg-white/50'
             }`}
           >
-            {t('dash.myPortfolios.filterAll')} ({totalCount})
+            <Layers className="w-4 h-4 text-indigo-600" />
+            <span>{t('dash.myPortfolios.filterAll')}</span>
+            <span className={`text-[12px] px-2 py-0.5 rounded-full font-bold ${
+              statusFilter === 'all' ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-200/70 text-slate-600'
+            }`}>
+              {totalCount}
+            </span>
           </button>
+
           <button
             onClick={() => setStatusFilter('active')}
-            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-colors cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[14px] transition-all cursor-pointer ${
               statusFilter === 'active'
-                ? 'bg-emerald-600 text-white'
-                : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                ? 'bg-white text-emerald-700 font-black shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 font-bold hover:bg-white/50'
             }`}
           >
-            {t('dash.myPortfolios.filterActive')} ({activeCount})
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span>{t('dash.myPortfolios.filterActive')}</span>
+            <span className={`text-[12px] px-2 py-0.5 rounded-full font-bold ${
+              statusFilter === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-200/70 text-slate-600'
+            }`}>
+              {activeCount}
+            </span>
           </button>
+
           <button
             onClick={() => setStatusFilter('off')}
-            className={`px-4 py-2 rounded-xl text-[14px] font-bold transition-colors cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[14px] transition-all cursor-pointer ${
               statusFilter === 'off'
-                ? 'bg-amber-600 text-white'
-                : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
+                ? 'bg-white text-amber-700 font-black shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 font-bold hover:bg-white/50'
             }`}
           >
-            {t('dash.myPortfolios.filterOff')} ({offCount})
+            <AlertOctagon className="w-4 h-4 text-amber-600" />
+            <span>{t('dash.myPortfolios.filterOff')}</span>
+            <span className={`text-[12px] px-2 py-0.5 rounded-full font-bold ${
+              statusFilter === 'off' ? 'bg-amber-50 text-amber-700' : 'bg-slate-200/70 text-slate-600'
+            }`}>
+              {offCount}
+            </span>
           </button>
         </div>
       </div>
@@ -289,7 +307,6 @@ export default function MyPortfolios() {
             const isActive = !isOff;
             const targetSub = p.subdomain || username;
             const fullDomainUrl = `https://${targetSub}.webcuaban.site`;
-            const editorRoute = `/dashboard/editor/${p.id || 'inst-' + targetSub}`;
             const isToggling = togglingId === p.id;
 
             return (
@@ -320,10 +337,6 @@ export default function MyPortfolios() {
                           {t('dash.myPortfolios.statusOffline')}
                         </span>
                       )}
-
-                      <span className="text-[13px] font-mono text-slate-500 bg-slate-100 px-3 py-1 rounded-lg font-semibold">
-                        ID: {p.template_id || p.id.slice(0, 8)}
-                      </span>
                     </div>
 
                     {/* Domain Url */}
@@ -357,7 +370,7 @@ export default function MyPortfolios() {
                   {/* Right: Toggle Switch & Actions */}
                   <div className="flex flex-wrap items-center gap-4 shrink-0 pt-3 lg:pt-0 border-t lg:border-t-0 border-slate-100">
                     
-                    {/* BẬT / TẮT TRẠNG THÁI TÊN MIỀN (TOGGLE SWITCH) */}
+                    {/* BẬT / TẮT TRẠNG THÁI TÊN MIỀN (MODERN SLEEK TOGGLE SWITCH) */}
                     <div className="flex items-center gap-3.5 pr-4 border-r border-slate-200">
                       <div className="text-right">
                         <span className="text-[13px] font-bold text-slate-500 uppercase tracking-wider block">
@@ -372,17 +385,17 @@ export default function MyPortfolios() {
                         type="button"
                         onClick={() => handleToggleStatus(p)}
                         disabled={isToggling}
-                        className={`relative inline-flex h-9 w-16 items-center rounded-full transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
-                          isActive ? 'bg-emerald-600' : 'bg-slate-300'
+                        className={`relative inline-flex h-8 w-14 shrink-0 items-center rounded-full p-0.5 transition-colors duration-300 ease-in-out cursor-pointer focus:outline-none ${
+                          isActive ? 'bg-emerald-500 shadow-inner' : 'bg-slate-300 hover:bg-slate-400'
                         }`}
-                        title={isActive ? 'Turn OFF domain (404)' : 'Turn ON domain (Online)'}
+                        title={isActive ? 'BẬT (Online) - Nhấn để Tắt' : 'TẮT (Offline) - Nhấn để Bật'}
                       >
                         <span
-                          className={`inline-block h-7 w-7 transform rounded-full bg-white transition-transform shadow-md flex items-center justify-center ${
-                            isActive ? 'translate-x-8 text-emerald-600' : 'translate-x-1 text-slate-400'
+                          className={`pointer-events-none inline-block h-7 w-7 transform rounded-full bg-white shadow-md transition-all duration-300 ease-in-out flex items-center justify-center ${
+                            isActive ? 'translate-x-6 text-emerald-600' : 'translate-x-0 text-slate-400'
                           }`}
                         >
-                          <Power className="w-4 h-4" />
+                          <Power className={`w-3.5 h-3.5 transition-transform duration-300 ${isActive ? 'rotate-0 scale-100' : 'rotate-180 scale-90'}`} />
                         </span>
                       </button>
                     </div>
@@ -407,13 +420,15 @@ export default function MyPortfolios() {
                       <Eye className="w-4 h-4" /> {t('dash.myPortfolios.viewWeb')}
                     </a>
 
-                    {/* Nút Quản Trị Template */}
-                    <Link
-                      to={editorRoute}
-                      className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[14px] font-bold transition-all cursor-pointer shadow-xs"
+                    {/* Nút Quản lý Template (Mở admin.html trong tab mới, không có ký tự >_) */}
+                    <a
+                      href={`https://${targetSub}.webcuaban.site/admin.html`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[14px] font-extrabold transition-all cursor-pointer shadow-xs"
                     >
-                      <Terminal className="w-4 h-4" /> {t('dash.myPortfolios.adminWeb')}
-                    </Link>
+                      {language === 'vi' ? 'Quản lý template' : 'Manage template'}
+                    </a>
                   </div>
 
                 </div>

@@ -52,34 +52,55 @@ export default function TemplateDetail() {
     }
   }, [slug]);
 
-  // Check if current user already owns this template
+  // Check if current authenticated user already owns this template
   useEffect(() => {
-    if (!template) return;
+    if (!template || !user) {
+      setOwnedInstance(null);
+      return;
+    }
     const checkOwnership = async () => {
       try {
         const portfolios = await api.portfolios.getAll();
-        const found = portfolios.find((p: any) => 
-          p.template_id === template.id || 
-          p.template_slug === template.slug ||
-          p.template_id === template.slug ||
-          (template.slug && p.template_id?.includes(template.slug.replace(/^port-/, ''))) ||
-          (template.name && p.template_name?.toLowerCase() === template.name.toLowerCase()) ||
-          (template.slug && p.template_slug?.includes(template.slug))
-        );
-        if (found) {
-          setOwnedInstance(found);
-        }
+        const found = portfolios.find((p: any) => {
+          // Strictly verify that the portfolio belongs to the currently logged-in user
+          const isUserMatch = 
+            (user.id && p.user_id && String(p.user_id) === String(user.id)) || 
+            (user.email && p.user_email && p.user_email.toLowerCase() === user.email.toLowerCase()) ||
+            (user.email && p.user_id && String(p.user_id).toLowerCase() === user.email.toLowerCase());
+
+          if (!isUserMatch) return false;
+
+          return (
+            p.template_id === template.id || 
+            p.template_slug === template.slug ||
+            p.template_id === template.slug ||
+            (template.slug && p.template_id?.includes(template.slug.replace(/^port-/, ''))) ||
+            (template.name && p.template_name?.toLowerCase() === template.name.toLowerCase()) ||
+            (template.slug && p.template_slug?.includes(template.slug))
+          );
+        });
+        setOwnedInstance(found || null);
       } catch (e) {
         console.error('Failed to check template ownership', e);
+        setOwnedInstance(null);
       }
     };
     checkOwnership();
   }, [template, user]);
 
+  const isOwned = Boolean(user && ownedInstance);
+  const ownedSubdomain = ownedInstance?.subdomain || (user?.email ? user.email.split('@')[0] : '');
+  const cleanSubdomain = ownedSubdomain ? ownedSubdomain.toLowerCase().replace(/[^a-z0-9-]/g, '') : '';
+
   const handleCheckout = async () => {
     if (!template) return;
-    if (ownedInstance) {
+    if (isOwned) {
       toast.info('Bạn đã sở hữu template này rồi!');
+      return;
+    }
+    if (!user) {
+      toast.info('Vui lòng đăng nhập để sở hữu template này!');
+      navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`);
       return;
     }
     navigate(`/checkout?slug=${template.slug}&templateId=${template.id}&amount=${template.salePrice || template.price}`);
@@ -103,13 +124,9 @@ export default function TemplateDetail() {
     return `$${amount}`;
   };
 
-  const isOwned = Boolean(ownedInstance);
-  const ownedSubdomain = ownedInstance?.subdomain || (user?.email ? user.email.split('@')[0] : 'my-site');
-  const cleanSubdomain = ownedSubdomain.toLowerCase().replace(/[^a-z0-9-]/g, '');
-
-  const displaySiteUrl = `https://${formatSubdomainDisplay(cleanSubdomain)}`;
-  const officialSiteUrl = `https://${formatSubdomainDisplay(cleanSubdomain)}`;
-  const officialAdminUrl = `https://${formatSubdomainDisplay(cleanSubdomain)}/admin.html`;
+  const displaySiteUrl = cleanSubdomain ? `https://${formatSubdomainDisplay(cleanSubdomain)}` : '';
+  const officialSiteUrl = cleanSubdomain ? `https://${formatSubdomainDisplay(cleanSubdomain)}` : '';
+  const officialAdminUrl = cleanSubdomain ? `https://${formatSubdomainDisplay(cleanSubdomain)}/admin.html` : '';
 
   const galleryList = [
     template.thumbnail,

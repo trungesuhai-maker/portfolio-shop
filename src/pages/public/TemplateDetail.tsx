@@ -5,11 +5,27 @@ import { api } from '@/src/services/api';
 import { Button } from '@/src/components/ui/Button';
 import { Loading } from '@/src/components/ui/Loading';
 import { ErrorState } from '@/src/components/ui/ErrorState';
-import { ArrowLeft, CheckCircle2, ExternalLink, MonitorSmartphone, ShoppingCart, LayoutTemplate, Zap, Edit3, Eye } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  CheckCircle2, 
+  ExternalLink, 
+  MonitorSmartphone, 
+  ShoppingCart, 
+  LayoutTemplate, 
+  Zap, 
+  Edit3, 
+  Eye,
+  ShieldCheck,
+  Globe,
+  Copy,
+  Terminal,
+  Sparkles
+} from 'lucide-react';
 import { motion } from 'motion/react';
 import { useLanguage } from '@/src/contexts/LanguageContext';
 import { useAuth } from '@/src/contexts/AuthContext';
 import { toast } from 'sonner';
+import { formatSubdomainDisplay } from '@/src/utils/domain';
 
 export default function TemplateDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -17,6 +33,8 @@ export default function TemplateDetail() {
   const [activeImage, setActiveImage] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [checkingOut, setCheckingOut] = useState(false);
+  const [ownedInstance, setOwnedInstance] = useState<any>(null);
+  const [copied, setCopied] = useState(false);
   const { t } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -34,9 +52,44 @@ export default function TemplateDetail() {
     }
   }, [slug]);
 
+  // Check if current user already owns this template
+  useEffect(() => {
+    if (!template) return;
+    const checkOwnership = async () => {
+      try {
+        const portfolios = await api.portfolios.getAll();
+        const found = portfolios.find((p: any) => 
+          p.template_id === template.id || 
+          p.template_slug === template.slug ||
+          p.template_id === template.slug ||
+          (template.slug && p.template_id?.includes(template.slug.replace(/^port-/, ''))) ||
+          (template.name && p.template_name?.toLowerCase() === template.name.toLowerCase()) ||
+          (template.slug && p.template_slug?.includes(template.slug))
+        );
+        if (found) {
+          setOwnedInstance(found);
+        }
+      } catch (e) {
+        console.error('Failed to check template ownership', e);
+      }
+    };
+    checkOwnership();
+  }, [template, user]);
+
   const handleCheckout = async () => {
     if (!template) return;
+    if (ownedInstance) {
+      toast.info('Bạn đã sở hữu template này rồi!');
+      return;
+    }
     navigate(`/checkout?slug=${template.slug}&templateId=${template.id}&amount=${template.salePrice || template.price}`);
+  };
+
+  const handleCopyUrl = (url: string) => {
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    toast.success('Đã sao chép liên kết website!');
+    setTimeout(() => setCopied(false), 2000);
   };
 
   if (loading) return <div className="pt-32 pb-20"><Loading /></div>;
@@ -49,6 +102,11 @@ export default function TemplateDetail() {
     }
     return `$${amount}`;
   };
+
+  const isOwned = Boolean(ownedInstance);
+  const ownedSubdomain = ownedInstance?.subdomain || (user?.email ? user.email.split('@')[0] : 'my-site');
+  const officialSiteUrl = `https://${formatSubdomainDisplay(ownedSubdomain)}`;
+  const officialAdminUrl = `https://${formatSubdomainDisplay(ownedSubdomain)}/admin.html`;
 
   const galleryList = [
     template.thumbnail,
@@ -81,7 +139,7 @@ export default function TemplateDetail() {
                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
                    </div>
                    <div className="text-[11px] font-bold text-slate-400 max-w-[200px] truncate">
-                     {template.demoUrl || template.slug}
+                     {isOwned ? formatSubdomainDisplay(ownedSubdomain) : (template.demoUrl || template.slug)}
                    </div>
                    <div className="w-8"></div>
                 </div>
@@ -146,6 +204,15 @@ export default function TemplateDetail() {
               <span className="text-xs sm:text-sm font-extrabold text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-3.5 py-1 rounded-full uppercase tracking-wider">
                 {template.categoryName || 'Portfolio'}
               </span>
+
+              {/* Ownership Badge */}
+              {isOwned && (
+                <span className="text-xs sm:text-sm font-black text-emerald-700 bg-emerald-50 border border-emerald-300 px-3.5 py-1 rounded-full flex items-center gap-1.5 shadow-xs animate-in fade-in">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>ĐÃ SỞ HỮU BẢN QUYỀN</span>
+                </span>
+              )}
+
               {template.badge === 'banchay' && <span className="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full">🔥 Bán chạy</span>}
               {template.badge === 'new' && <span className="text-xs font-bold text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1 rounded-full">✨ Mới ra mắt</span>}
               {template.badge === 'hot' && <span className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">⚡ HOT</span>}
@@ -172,7 +239,7 @@ export default function TemplateDetail() {
                 )}
              </div>
              <p className="text-xs sm:text-sm font-bold text-slate-400 sm:ml-auto bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200/60">
-               Thanh toán 1 lần • Sở hữu vĩnh viễn
+               {isOwned ? '✓ Đã kích hoạt bản quyền trọn đời' : 'Thanh toán 1 lần • Sở hữu vĩnh viễn'}
              </p>
           </div>
 
@@ -228,81 +295,173 @@ export default function TemplateDetail() {
 
             return (
               <div className="space-y-3">
-                <Button 
-                  size="lg" 
-                  className="w-full gap-2 text-[16px] h-14 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-2xl shadow-lg shadow-indigo-600/20 transition-transform active:scale-[0.99] cursor-pointer"
-                  onClick={handleCheckout}
-                  disabled={checkingOut}
-                >
-                  <ShoppingCart className="w-5 h-5" /> {checkingOut ? 'Đang xử lý...' : 'Mua Template'}
-                </Button>
+                {/* Primary Button */}
+                {isOwned ? (
+                  <button 
+                    disabled
+                    className="w-full gap-2 text-[15px] h-14 bg-slate-100 border-2 border-slate-300/80 text-slate-400 font-extrabold rounded-2xl flex items-center justify-center cursor-not-allowed select-none shadow-none transition-none"
+                  >
+                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                    <span>Bạn Đã Sở Hữu Template Này (Đã Mua)</span>
+                  </button>
+                ) : (
+                  <Button 
+                    size="lg" 
+                    className="w-full gap-2 text-[16px] h-14 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-2xl shadow-lg shadow-indigo-600/20 transition-transform active:scale-[0.99] cursor-pointer"
+                    onClick={handleCheckout}
+                    disabled={checkingOut}
+                  >
+                    <ShoppingCart className="w-5 h-5" /> {checkingOut ? 'Đang xử lý...' : 'Mua Template'}
+                  </Button>
+                )}
 
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {isEditExternal ? (
-                    <a 
-                      href={editUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 border-2 border-indigo-600 bg-white hover:bg-indigo-50 text-indigo-600 font-bold rounded-xl shadow-none transition-colors cursor-pointer"
-                      title="Mở ứng dụng AI Studio gốc để chỉnh sửa"
+                {/* Secondary Action Buttons */}
+                {isOwned ? (
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <a
+                      href={officialAdminUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
+                      title="Mở bảng điều khiển quản trị template của bạn"
                     >
-                      <Edit3 className="w-4 h-4 text-indigo-600" /> Chỉnh Sửa Thử (EDIT)
+                      <Terminal className="w-4 h-4 text-indigo-200" />
+                      <span>Quản Trị Template</span>
                     </a>
-                  ) : (
-                    <Link 
-                      to={editUrl} 
-                      className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 border-2 border-indigo-600 bg-white hover:bg-indigo-50 text-indigo-600 font-bold rounded-xl shadow-none transition-colors cursor-pointer"
-                      title="Mở trình chỉnh sửa portfolio"
-                    >
-                      <Edit3 className="w-4 h-4 text-indigo-600" /> Chỉnh Sửa Thử (EDIT)
-                    </Link>
-                  )}
 
-                  {isDemoExternal ? (
-                    <a 
-                      href={demoUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 border-2 border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-bold rounded-xl shadow-none transition-colors cursor-pointer"
-                      title="Xem website ứng dụng trực tiếp"
+                    <a
+                      href={officialSiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 border-2 border-emerald-500 bg-emerald-50/50 hover:bg-emerald-100/70 text-emerald-800 font-extrabold rounded-xl shadow-xs transition-colors cursor-pointer"
+                      title="Xem website thật của bạn"
                     >
-                      <Eye className="w-4 h-4 text-slate-600" /> Xem Demo Trực Tiếp
+                      <Globe className="w-4 h-4 text-emerald-600" />
+                      <span>Xem Website Của Bạn</span>
+                      <ExternalLink className="w-3.5 h-3.5 text-emerald-600 ml-0.5" />
                     </a>
-                  ) : (
-                    <Link 
-                      to={demoUrl} 
-                      className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 border-2 border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-bold rounded-xl shadow-none transition-colors cursor-pointer"
-                      title="Xem demo"
-                    >
-                      <Eye className="w-4 h-4 text-slate-600" /> Xem Demo Trực Tiếp
-                    </Link>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {isEditExternal ? (
+                      <a 
+                        href={editUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 border-2 border-indigo-600 bg-white hover:bg-indigo-50 text-indigo-600 font-bold rounded-xl shadow-none transition-colors cursor-pointer"
+                        title="Mở ứng dụng AI Studio gốc để chỉnh sửa"
+                      >
+                        <Edit3 className="w-4 h-4 text-indigo-600" /> Chỉnh Sửa Thử (EDIT)
+                      </a>
+                    ) : (
+                      <Link 
+                        to={editUrl} 
+                        className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 border-2 border-indigo-600 bg-white hover:bg-indigo-50 text-indigo-600 font-bold rounded-xl shadow-none transition-colors cursor-pointer"
+                        title="Mở trình chỉnh sửa portfolio"
+                      >
+                        <Edit3 className="w-4 h-4 text-indigo-600" /> Chỉnh Sửa Thử (EDIT)
+                      </Link>
+                    )}
+
+                    {isDemoExternal ? (
+                      <a 
+                        href={demoUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 border-2 border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-bold rounded-xl shadow-none transition-colors cursor-pointer"
+                        title="Xem website ứng dụng trực tiếp"
+                      >
+                        <Eye className="w-4 h-4 text-slate-600" /> Xem Demo Trực Tiếp
+                      </a>
+                    ) : (
+                      <Link 
+                        to={demoUrl} 
+                        className="w-full inline-flex items-center justify-center gap-2 text-sm sm:text-base h-12 border-2 border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-bold rounded-xl shadow-none transition-colors cursor-pointer"
+                        title="Xem demo"
+                      >
+                        <Eye className="w-4 h-4 text-slate-600" /> Xem Demo Trực Tiếp
+                      </Link>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })()}
 
-          {/* Domain Ownership Info Card (Giải pháp 1: https://user.webcuaban.site/[template-slug]) */}
-          <div className="p-4 sm:p-5 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-2xl border-2 border-indigo-200/80 space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <h4 className="text-xs sm:text-sm font-extrabold text-indigo-950 uppercase tracking-wider">
-                🌟 Quyền sở hữu Tên miền & Không gian Website riêng
-              </h4>
+          {/* Domain & Ownership Info Card */}
+          {isOwned ? (
+            <div className="p-4 sm:p-5 bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 rounded-2xl border-2 border-emerald-300 shadow-sm space-y-3 animate-in fade-in">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <h4 className="text-xs sm:text-sm font-extrabold text-emerald-950 uppercase tracking-wider">
+                    🟢 Bản Quyền & Tên Miền Đang Hoạt Động
+                  </h4>
+                </div>
+                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full">
+                  Trạng thái: Online
+                </span>
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+                Website của bạn đang hoạt động trên tên miền riêng chính thức:
+              </p>
+
+              <div className="flex items-center justify-between gap-2 font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-emerald-300 text-emerald-900 font-bold shadow-xs">
+                <span className="truncate">{officialSiteUrl}</span>
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    onClick={() => handleCopyUrl(officialSiteUrl)}
+                    className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                    title="Sao chép tên miền"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </button>
+                  <a
+                    href={officialSiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg hover:bg-emerald-50 text-emerald-600 hover:text-emerald-700 transition-colors cursor-pointer"
+                    title="Mở website"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-1">
+                <p className="text-[11px] text-slate-500 italic">
+                  ✨ Mọi tùy chỉnh trong Quản Trị sẽ được đồng bộ trực tiếp lên tên miền này.
+                </p>
+                <Link
+                  to="/dashboard/domains"
+                  className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline shrink-0"
+                >
+                  Quản lý Subdomain &rarr;
+                </Link>
+              </div>
             </div>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-              Sau khi thanh toán, bạn sẽ được cấp không gian thương hiệu vĩnh viễn với cấu trúc subdomain:
-            </p>
-            <div className="flex flex-wrap items-center gap-2 font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-indigo-200 text-indigo-900 font-bold shadow-xs">
-              <span className="text-slate-400">https://</span>
-              <span className="text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">[tên-của-bạn]</span>
-              <span className="text-indigo-600">.webcuaban.site/</span>
-              <span className="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">{template.slug}</span>
+          ) : (
+            <div className="p-4 sm:p-5 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-2xl border-2 border-indigo-200/80 space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <h4 className="text-xs sm:text-sm font-extrabold text-indigo-950 uppercase tracking-wider">
+                  🌟 Quyền sở hữu Tên miền & Không gian Website riêng
+                </h4>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+                Sau khi thanh toán, bạn sẽ được cấp không gian thương hiệu vĩnh viễn với cấu trúc subdomain:
+              </p>
+              <div className="flex flex-wrap items-center gap-2 font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-indigo-200 text-indigo-900 font-bold shadow-xs">
+                <span className="text-slate-400">https://</span>
+                <span className="text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">[tên-của-bạn]</span>
+                <span className="text-indigo-600">.webcuaban.site</span>
+              </div>
+              <p className="text-[11px] text-slate-500 italic">
+                ✨ Nếu bạn mua nhiều template, tất cả đều được gom gọn gàng trong không gian <code className="font-mono text-indigo-700 bg-white px-1 py-0.5 rounded border border-indigo-100">[tên-của-bạn].webcuaban.site/...</code>
+              </p>
             </div>
-            <p className="text-[11px] text-slate-500 italic">
-              ✨ Nếu bạn mua nhiều template, tất cả đều được gom gọn gàng trong không gian <code className="font-mono text-indigo-700 bg-white px-1 py-0.5 rounded border border-indigo-100">[tên-của-bạn].webcuaban.site/...</code>
-            </p>
-          </div>
+          )}
 
           {/* Features & Editable Schema Fields */}
           <div className="grid sm:grid-cols-2 gap-6 pt-4">

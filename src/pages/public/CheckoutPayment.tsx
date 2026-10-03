@@ -205,7 +205,7 @@ export default function CheckoutPayment() {
   
   // Clean Subdomain & Subpath URLs
   const liveWebsiteUrl = `https://${cleanSubdomain}.webcuaban.site`;
-  const adminWebsiteUrl = `${window.location.origin}/dashboard/editor/inst-${cleanSubdomain}`;
+  const adminWebsiteUrl = `https://${cleanSubdomain}.webcuaban.site/admin.html`;
 
   const handleCompletePayment = async () => {
     if (paymentSuccess) return;
@@ -797,12 +797,14 @@ export default function CheckoutPayment() {
                     <ExternalLink className="w-4 h-4" /> Đến Trang Chủ Template
                   </a>
 
-                  <Link
-                    to={`/dashboard/editor/inst-${cleanSubdomain}`}
+                  <a
+                    href={adminWebsiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-full py-3.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
-                    <Terminal className="w-4 h-4" /> Đến Trang Quản Trị
-                  </Link>
+                    <Terminal className="w-4 h-4 text-indigo-400" /> Đến Trang Quản Trị
+                  </a>
                 </div>
 
                 <Link

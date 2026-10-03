@@ -16,7 +16,8 @@ import {
   Share2,
   X,
   Copy,
-  Tag
+  Tag,
+  Terminal
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatSubdomainDisplay, getRootDomain } from '@/src/utils/domain';
@@ -195,89 +196,151 @@ export default function PublicPortfolioViewer() {
   const aboutBio = customData.about_bio || '';
   const seo = instance.seo || {};
 
-  // Check if user requested admin editor path (e.g. /photograph/admin.html or /admin)
+  // Check if user requested admin editor path (e.g. /photograph/admin.html or /admin or /admin/)
   const isPageAdminUrl = typeof window !== 'undefined' && (
     window.location.pathname.endsWith('/admin.html') || 
-    window.location.pathname.endsWith('/admin')
+    window.location.pathname.endsWith('/admin') ||
+    window.location.pathname.endsWith('/admin/')
   );
-
-  if (isPageAdminUrl && instance?.id) {
-    window.location.href = `/dashboard/editor/${instance.id}`;
-    return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white">
-        <Loading size={32} />
-        <p className="mt-4 text-sm font-bold text-indigo-400">Đang chuyển hướng tới Trang Quản Trị Template...</p>
-      </div>
-    );
-  }
 
   // Check if this template is linked to an external live AI Studio project
   const liveDeploymentUrl = (template.originUrl || template.demoUrl || '').trim();
   const isLiveProxyEnabled = liveDeploymentUrl.startsWith('http://') || liveDeploymentUrl.startsWith('https://');
+  const isLicensed = instance?.status === 'published' || instance?.status === 'active';
+
+  // Construct licensed URL with license & hideBanner & tenant parameters
+  let iframeUrl = liveDeploymentUrl;
+  if (isLiveProxyEnabled) {
+    try {
+      let targetUrlStr = liveDeploymentUrl;
+      if (isPageAdminUrl) {
+        if (template.adminUrl && (template.adminUrl.startsWith('http://') || template.adminUrl.startsWith('https://'))) {
+          targetUrlStr = template.adminUrl;
+        } else {
+          // Construct admin.html URL from liveDeploymentUrl
+          const parsed = new URL(liveDeploymentUrl);
+          if (!parsed.pathname.includes('admin.html')) {
+            parsed.pathname = parsed.pathname.endsWith('/')
+              ? `${parsed.pathname}admin.html`
+              : `${parsed.pathname}/admin.html`.replace(/\/\//g, '/');
+          }
+          targetUrlStr = parsed.toString();
+        }
+      }
+
+      const urlObj = new URL(targetUrlStr);
+      if (isLicensed) {
+        urlObj.searchParams.set('licensed', 'true');
+        urlObj.searchParams.set('trial', 'false');
+        urlObj.searchParams.set('mode', 'published');
+        urlObj.searchParams.set('hideBanner', 'true');
+        urlObj.searchParams.set('licenseKey', instance?.id || 'activated');
+        urlObj.searchParams.set('domain', formatSubdomainDisplay(instance?.subdomain || currentSlug));
+        urlObj.searchParams.set('subdomain', instance?.subdomain || currentSlug);
+        urlObj.searchParams.set('tenant', instance?.subdomain || currentSlug);
+        urlObj.searchParams.set('instanceId', instance?.id || `inst-${instance?.subdomain || currentSlug}`);
+      }
+      iframeUrl = urlObj.toString();
+    } catch (e) {
+      let base = liveDeploymentUrl;
+      if (isPageAdminUrl) {
+        base = template.adminUrl || `${liveDeploymentUrl.replace(/\/$/, '')}/admin.html`;
+      }
+      const separator = base.includes('?') ? '&' : '?';
+      iframeUrl = isLicensed 
+        ? `${base}${separator}licensed=true&trial=false&mode=published&hideBanner=true&tenant=${encodeURIComponent(instance?.subdomain || currentSlug)}&domain=${encodeURIComponent(formatSubdomainDisplay(instance?.subdomain || currentSlug))}`
+        : base;
+    }
+  }
 
   // If live AI Studio project URL is connected, render Full-Viewport Live Gateway
   if (isLiveProxyEnabled) {
     return (
-      <div className="fixed inset-0 w-full h-full bg-black flex flex-col overflow-hidden z-50">
-        {/* Dynamic Edge Gateway Control Bar */}
-        <header className="h-11 bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80 px-4 flex items-center justify-between gap-3 text-xs shrink-0 z-50 select-none">
-          <div className="flex items-center gap-2.5 overflow-hidden">
-            <Link 
-              to="/templates"
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors font-medium border border-slate-700/60 shrink-0"
-              title="Quay lại danh mục Shop"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Shop</span>
-            </Link>
+      <div className="fixed inset-0 w-full h-full bg-slate-950 flex flex-col overflow-hidden z-50">
+        {/* Only show header bar for Demo / Unlicensed Preview, hide completely for official licensed domains */}
+        {!isLicensed && (
+          <header className="h-11 bg-slate-950/95 backdrop-blur-md border-b border-slate-800/80 px-4 flex items-center justify-between gap-3 text-xs shrink-0 z-50 select-none">
+            <div className="flex items-center gap-2.5 overflow-hidden">
+              <Link 
+                to="/templates"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors font-medium border border-slate-700/60 shrink-0"
+                title="Quay lại danh mục Shop"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Shop</span>
+              </Link>
 
-            <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 px-3 py-1 rounded-full font-mono text-[11px] font-bold truncate">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
-              <span className="truncate">https://{formatSubdomainDisplay(instance.subdomain || currentSlug)}</span>
+              <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 px-3 py-1 rounded-full font-mono text-[11px] font-bold truncate">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+                <span className="truncate">https://{formatSubdomainDisplay(instance.subdomain || currentSlug)}{isPageAdminUrl ? '/admin.html' : ''}</span>
+              </div>
+
+              <div className="hidden md:flex items-center gap-1.5 text-slate-400 text-xs">
+                <span className="text-slate-600">•</span>
+                <Layers className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                <span className="truncate">Template: <strong className="text-slate-200">{template.name}</strong> {isPageAdminUrl ? '(Admin Portal)' : ''}</span>
+              </div>
             </div>
 
-            <div className="hidden md:flex items-center gap-1.5 text-slate-400 text-xs">
-              <span className="text-slate-600">•</span>
-              <Layers className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-              <span className="truncate">Template: <strong className="text-slate-200">{template.name}</strong></span>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => setShowSeoInspector(true)}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 font-medium border border-indigo-500/30 transition-colors text-xs cursor-pointer"
+                title="Xem thẻ Meta SEO"
+              >
+                <Search className="w-3.5 h-3.5 text-indigo-400" />
+                <span className="hidden sm:inline">SEO Tags</span>
+              </button>
+
+              <a
+                href={iframeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all text-xs shadow-sm cursor-pointer"
+                title="Mở toàn màn hình tab mới"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Mở Tab Mới</span>
+              </a>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            {/* SEO Tag Inspector */}
-            <button
-              onClick={() => setShowSeoInspector(true)}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 font-medium border border-indigo-500/30 transition-colors text-xs cursor-pointer"
-              title="Xem thẻ Meta SEO"
-            >
-              <Search className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="hidden sm:inline">SEO Tags</span>
-            </button>
-
-            {/* Direct Open in New Tab Button */}
-            <a
-              href={liveDeploymentUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all text-xs shadow-sm cursor-pointer"
-              title="Mở toàn màn hình tab mới"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span>Mở Tab Mới</span>
-            </a>
-          </div>
-        </header>
+          </header>
+        )}
 
         {/* Full-Viewport Zero-Latency Live IFrame */}
-        <div className="flex-1 w-full h-[calc(100vh-44px)] bg-slate-950 relative">
+        <div className={`flex-1 w-full ${isLicensed ? 'h-full' : 'h-[calc(100vh-44px)]'} bg-slate-950 relative`}>
           <iframe
-            src={liveDeploymentUrl}
+            src={iframeUrl}
             title={template.name}
             className="w-full h-full border-0 absolute inset-0 bg-slate-950"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
         </div>
+
+        {/* Subtle floating navigation button for owner */}
+        {isLicensed && instance?.id && (
+          isPageAdminUrl ? (
+            <a
+              href={`https://${formatSubdomainDisplay(instance.subdomain || currentSlug)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="fixed bottom-4 right-4 z-50 px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-emerald-600 text-slate-300 hover:text-white font-bold text-xs backdrop-blur-md shadow-lg border border-slate-700/60 flex items-center gap-1.5 transition-all opacity-70 hover:opacity-100 cursor-pointer"
+              title="Xem website thật của bạn"
+            >
+              <Globe className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Xem Trang Chủ Website</span>
+            </a>
+          ) : (
+            <a
+              href={`https://${formatSubdomainDisplay(instance.subdomain || currentSlug)}/admin.html`}
+              className="fixed bottom-4 left-4 z-50 px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-indigo-600 text-slate-300 hover:text-white font-bold text-xs backdrop-blur-md shadow-lg border border-slate-700/60 flex items-center gap-1.5 transition-all opacity-70 hover:opacity-100 cursor-pointer"
+              title="Mở trang Quản Trị Template"
+            >
+              <Terminal className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Quản Trị Template (/admin.html)</span>
+            </a>
+          )
+        )}
 
         {/* SEO Inspector Modal */}
         {showSeoInspector && (

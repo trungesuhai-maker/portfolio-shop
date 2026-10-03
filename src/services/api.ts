@@ -90,6 +90,28 @@ function setStoredCachedTemplates(templates: Template[]) {
 
 export const api = {
   portfolios: {
+    getAll: async (): Promise<PortfolioInstance[]> => {
+      try {
+        const res = await fetch('/api/portfolios', { headers: getAuthHeaders() });
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) return data;
+        }
+      } catch (e) {}
+
+      // Fallback to local storage
+      if (typeof window !== 'undefined') {
+        const raw = localStorage.getItem('my_portfolios');
+        if (raw) {
+          try {
+            const list = JSON.parse(raw);
+            if (Array.isArray(list) && list.length > 0) return list;
+          } catch (e) {}
+        }
+      }
+
+      return MOCK_PORTFOLIOS;
+    },
     getById: async (id: string): Promise<PortfolioInstance | null> => {
       try {
         const res = await fetch(`/api/portfolios/${id}`);

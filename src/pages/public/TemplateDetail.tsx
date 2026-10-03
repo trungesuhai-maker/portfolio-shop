@@ -107,43 +107,9 @@ export default function TemplateDetail() {
   const ownedSubdomain = ownedInstance?.subdomain || (user?.email ? user.email.split('@')[0] : 'my-site');
   const cleanSubdomain = ownedSubdomain.toLowerCase().replace(/[^a-z0-9-]/g, '');
 
-  // Base deployment target (originUrl or demoUrl)
-  const rawDemo = (template?.demoUrl || '').trim();
-  const rawOrigin = (template?.originUrl || '').trim();
-  const baseTarget = rawDemo || rawOrigin;
-
-  const buildLicensedUrl = (type: 'site' | 'admin') => {
-    if (baseTarget && (baseTarget.startsWith('http://') || baseTarget.startsWith('https://'))) {
-      try {
-        const urlObj = new URL(baseTarget);
-        if (type === 'admin') {
-          if (!urlObj.pathname.includes('admin')) {
-            urlObj.pathname = urlObj.pathname.endsWith('/')
-              ? `${urlObj.pathname}admin.html`
-              : `${urlObj.pathname}/admin.html`.replace(/\/\//g, '/');
-          }
-        }
-        urlObj.searchParams.set('licensed', 'true');
-        urlObj.searchParams.set('trial', 'false');
-        urlObj.searchParams.set('hideBanner', 'true');
-        urlObj.searchParams.set('mode', 'published');
-        urlObj.searchParams.set('domain', `${cleanSubdomain}.webcuaban.site`);
-        urlObj.searchParams.set('subdomain', cleanSubdomain);
-        urlObj.searchParams.set('tenant', cleanSubdomain);
-        urlObj.searchParams.set('instanceId', ownedInstance?.id || `inst-${cleanSubdomain}`);
-        return urlObj.toString();
-      } catch (e) {
-        // Fallback below
-      }
-    }
-    return type === 'admin' 
-      ? `https://${cleanSubdomain}.webcuaban.site/admin.html?licensed=true&hideBanner=true&tenant=${cleanSubdomain}`
-      : `https://${cleanSubdomain}.webcuaban.site/?licensed=true&hideBanner=true&tenant=${cleanSubdomain}`;
-  };
-
-  const officialSiteUrl = buildLicensedUrl('site');
-  const officialAdminUrl = buildLicensedUrl('admin');
-  const displaySiteUrl = `https://${cleanSubdomain}.webcuaban.site`;
+  const displaySiteUrl = `https://${formatSubdomainDisplay(cleanSubdomain)}`;
+  const officialSiteUrl = `https://${formatSubdomainDisplay(cleanSubdomain)}`;
+  const officialAdminUrl = `https://${formatSubdomainDisplay(cleanSubdomain)}/admin.html`;
 
   const galleryList = [
     template.thumbnail,

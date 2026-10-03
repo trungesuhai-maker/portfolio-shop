@@ -105,8 +105,45 @@ export default function TemplateDetail() {
 
   const isOwned = Boolean(ownedInstance);
   const ownedSubdomain = ownedInstance?.subdomain || (user?.email ? user.email.split('@')[0] : 'my-site');
-  const officialSiteUrl = `https://${formatSubdomainDisplay(ownedSubdomain)}`;
-  const officialAdminUrl = `https://${formatSubdomainDisplay(ownedSubdomain)}/admin.html`;
+  const cleanSubdomain = ownedSubdomain.toLowerCase().replace(/[^a-z0-9-]/g, '');
+
+  // Base deployment target (originUrl or demoUrl)
+  const rawDemo = (template?.demoUrl || '').trim();
+  const rawOrigin = (template?.originUrl || '').trim();
+  const baseTarget = rawDemo || rawOrigin;
+
+  const buildLicensedUrl = (type: 'site' | 'admin') => {
+    if (baseTarget && (baseTarget.startsWith('http://') || baseTarget.startsWith('https://'))) {
+      try {
+        const urlObj = new URL(baseTarget);
+        if (type === 'admin') {
+          if (!urlObj.pathname.includes('admin')) {
+            urlObj.pathname = urlObj.pathname.endsWith('/')
+              ? `${urlObj.pathname}admin.html`
+              : `${urlObj.pathname}/admin.html`.replace(/\/\//g, '/');
+          }
+        }
+        urlObj.searchParams.set('licensed', 'true');
+        urlObj.searchParams.set('trial', 'false');
+        urlObj.searchParams.set('hideBanner', 'true');
+        urlObj.searchParams.set('mode', 'published');
+        urlObj.searchParams.set('domain', `${cleanSubdomain}.webcuaban.site`);
+        urlObj.searchParams.set('subdomain', cleanSubdomain);
+        urlObj.searchParams.set('tenant', cleanSubdomain);
+        urlObj.searchParams.set('instanceId', ownedInstance?.id || `inst-${cleanSubdomain}`);
+        return urlObj.toString();
+      } catch (e) {
+        // Fallback below
+      }
+    }
+    return type === 'admin' 
+      ? `https://${cleanSubdomain}.webcuaban.site/admin.html?licensed=true&hideBanner=true&tenant=${cleanSubdomain}`
+      : `https://${cleanSubdomain}.webcuaban.site/?licensed=true&hideBanner=true&tenant=${cleanSubdomain}`;
+  };
+
+  const officialSiteUrl = buildLicensedUrl('site');
+  const officialAdminUrl = buildLicensedUrl('admin');
+  const displaySiteUrl = `https://${cleanSubdomain}.webcuaban.site`;
 
   const galleryList = [
     template.thumbnail,
@@ -408,10 +445,10 @@ export default function TemplateDetail() {
               </p>
 
               <div className="flex items-center justify-between gap-2 font-mono text-xs sm:text-sm bg-white p-3 rounded-xl border border-emerald-300 text-emerald-900 font-bold shadow-xs">
-                <span className="truncate">{officialSiteUrl}</span>
+                <span className="truncate">{displaySiteUrl}</span>
                 <div className="flex items-center gap-1 shrink-0">
                   <button
-                    onClick={() => handleCopyUrl(officialSiteUrl)}
+                    onClick={() => handleCopyUrl(displaySiteUrl)}
                     className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
                     title="Sao chép tên miền"
                   >

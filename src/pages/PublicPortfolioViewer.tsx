@@ -253,6 +253,26 @@ export default function PublicPortfolioViewer() {
     }
   }
 
+  // Function to broadcast license activation message to embedded template app
+  const sendLicenseBroadcast = (targetWindow: Window | null) => {
+    if (!targetWindow) return;
+    try {
+      const payload = {
+        type: 'WEBCUABAN_LICENSE_SYNC',
+        licensed: isLicensed,
+        hideBanner: isLicensed,
+        trial: !isLicensed,
+        mode: isLicensed ? 'published' : 'trial',
+        tenant: instance?.subdomain || currentSlug,
+        subdomain: instance?.subdomain || currentSlug,
+        domain: formatSubdomainDisplay(instance?.subdomain || currentSlug)
+      };
+      targetWindow.postMessage(payload, '*');
+    } catch (e) {
+      // Cross-origin safe
+    }
+  };
+
   // If live AI Studio project URL is connected, render Full-Viewport Live Gateway
   if (isLiveProxyEnabled) {
     return (
@@ -311,6 +331,13 @@ export default function PublicPortfolioViewer() {
           <iframe
             src={iframeUrl}
             title={template.name}
+            onLoad={(e) => {
+              const win = e.currentTarget.contentWindow;
+              sendLicenseBroadcast(win);
+              // Send recurring postMessage signals to ensure child application receives it upon mounting
+              setTimeout(() => sendLicenseBroadcast(win), 500);
+              setTimeout(() => sendLicenseBroadcast(win), 1500);
+            }}
             className="w-full h-full border-0 absolute inset-0 bg-slate-950"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen

@@ -4,14 +4,17 @@ import { useAuth } from '@/src/contexts/AuthContext';
 import { useLanguage } from '@/src/contexts/LanguageContext';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { User as UserIcon, Lock, Globe, Phone, Mail, Key } from 'lucide-react';
+import { User as UserIcon, Lock, Globe, Phone, Mail, Key, Hash, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { formatUserCode } from '@/src/utils/userId';
 
 export default function Settings() {
   const { user, updateProfile } = useAuth();
   const { t, language } = useLanguage();
   
-  const initialUserId = (() => {
+  const userCode = formatUserCode(user);
+
+  const initialUsername = (() => {
     if (user?.user_metadata?.username) return user.user_metadata.username;
     if (user?.phone) return user.phone.replace(/[^0-9]/g, '');
     if (user?.user_metadata?.phone) return String(user.user_metadata.phone).replace(/[^0-9]/g, '');
@@ -20,7 +23,7 @@ export default function Settings() {
   })();
 
   const [fullName, setFullName] = useState(user?.user_metadata?.full_name || '');
-  const [username, setUsername] = useState(initialUserId);
+  const [username, setUsername] = useState(initialUsername);
   const [phone, setPhone] = useState(user?.phone || user?.user_metadata?.phone || '');
   const [email] = useState(user?.email || '');
   
@@ -115,11 +118,27 @@ export default function Settings() {
           </div>
 
           <form className="space-y-6" onSubmit={handleUpdate}>
+            {/* User ID 6 digits & Subdomain Info */}
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-xs">
+                  #
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Mã Khách Hàng (User ID 6 Số)</p>
+                  <p className="text-base font-mono font-extrabold text-indigo-700 tracking-wider">{userCode}</p>
+                </div>
+              </div>
+              <span className="text-xs font-semibold text-slate-500 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-2xs w-fit">
+                ✓ Mã định danh bảo mật duy nhất
+              </span>
+            </div>
+
             <div className="grid sm:grid-cols-2 gap-6">
-              {/* User ID field */}
+              {/* Username / Subdomain field */}
               <div className="space-y-2">
                 <label className="text-[14px] font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
-                  <span>{t('dash.settings.userIdLabel')}</span>
+                  <span>Tên định danh / Subdomain</span>
                   <span className="text-[13px] text-indigo-600 font-mono font-bold">Subdomain</span>
                 </label>
                 <div>

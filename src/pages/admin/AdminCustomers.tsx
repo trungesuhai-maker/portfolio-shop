@@ -4,8 +4,9 @@ import { Card } from '@/src/components/ui/Card';
 import { Button } from '@/src/components/ui/Button';
 import { Input } from '@/src/components/ui/Input';
 import { Loading } from '@/src/components/ui/Loading';
-import { Users, Search, Mail, ShieldCheck, ShieldAlert, DollarSign } from 'lucide-react';
+import { Users, Search, Mail, ShieldCheck, ShieldAlert, DollarSign, Hash } from 'lucide-react';
 import { toast } from 'sonner';
+import { formatUserCode, getDeterministicUserCode } from '@/src/utils/userId';
 
 export default function AdminCustomers() {
   const [customers, setCustomers] = useState<any[]>([]);
@@ -39,22 +40,26 @@ export default function AdminCustomers() {
     }
   };
 
-  const filtered = customers.filter(c => 
-    c.name.toLowerCase().includes(search.toLowerCase()) ||
-    c.email.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = customers.filter(c => {
+    const userCode = getDeterministicUserCode(c);
+    return (
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.email?.toLowerCase().includes(search.toLowerCase()) ||
+      userCode.includes(search.replace(/[^0-9]/g, ''))
+    );
+  });
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Danh sách Khách hàng</h1>
-        <p className="text-slate-500 text-sm font-medium mt-1">Quản lý người mua đã đăng ký, lịch sử chi tiêu và quyền truy cập tài khoản.</p>
+        <p className="text-slate-500 text-sm font-medium mt-1">Quản lý người mua đã đăng ký, mã User ID 6 số, lịch sử chi tiêu và quyền truy cập tài khoản.</p>
       </div>
 
       <Card className="p-4 bg-white border-2 border-slate-200 shadow-none rounded-[12px] flex items-center gap-3">
         <Search className="w-4 h-4 text-slate-400 ml-1 flex-shrink-0" />
         <Input 
-          placeholder="Tìm theo tên hoặc email khách hàng..." 
+          placeholder="Tìm theo tên, email hoặc User ID 6 số (#829104)..." 
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="border-0 shadow-none focus-visible:ring-0 px-2 h-11 text-sm md:text-base font-medium"
@@ -68,6 +73,7 @@ export default function AdminCustomers() {
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b-2 border-slate-100 bg-slate-50/50 text-slate-600 text-sm font-bold">
+                <th className="py-3.5 px-4">Mã User ID</th>
                 <th className="py-3.5 px-4">Khách hàng</th>
                 <th className="py-3.5 px-4">Vai trò</th>
                 <th className="py-3.5 px-4">Đơn hàng</th>
@@ -80,6 +86,11 @@ export default function AdminCustomers() {
             <tbody className="divide-y divide-slate-100">
               {filtered.map((c) => (
                 <tr key={c.id} className="hover:bg-slate-50/60 transition-colors">
+                  <td className="py-3.5 px-4">
+                    <span className="font-mono font-extrabold text-sm px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/60">
+                      {formatUserCode(c)}
+                    </span>
+                  </td>
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-700 font-bold text-sm flex items-center justify-center border-2 border-slate-200">

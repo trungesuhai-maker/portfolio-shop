@@ -7,6 +7,7 @@ import { LanguageSwitcher } from '../ui/LanguageSwitcher';
 import { useState, useEffect } from 'react';
 import { api } from '@/src/services/api';
 import { ShopSettings } from '@/src/types';
+import { formatUserCode } from '@/src/utils/userId';
 
 export function DashboardLayout() {
   const { user, isAdmin } = useAuth();
@@ -54,16 +55,10 @@ export function DashboardLayout() {
     window.location.href = '/';
   };
 
-  const userId = (() => {
-    if (user?.user_metadata?.username) return user.user_metadata.username;
-    if (user?.phone) return user.phone.replace(/[^0-9]/g, '');
-    if (user?.user_metadata?.phone) return String(user.user_metadata.phone).replace(/[^0-9]/g, '');
-    if (user?.email) return user.email.split('@')[0].toLowerCase().replace(/[^a-z0-9-]/g, '');
-    return user?.id ? `user-${user.id.slice(0, 6)}` : 'user';
-  })();
+  const userCode = formatUserCode(user);
 
   const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture || null;
-  const displayName = user?.user_metadata?.full_name || userId;
+  const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || (user?.email ? user.email.split('@')[0] : 'Khách hàng');
   const userInitial = displayName.charAt(0).toUpperCase() || 'U';
 
   return (
@@ -173,7 +168,7 @@ export function DashboardLayout() {
                   {displayName}
                 </span>
                 <span className="text-[12px] font-mono text-slate-500 font-medium">
-                  {t('dash.nav.userId')}: <strong className="text-indigo-600 font-bold">{userId}</strong>
+                  {t('dash.nav.userId')}: <strong className="text-indigo-600 font-bold tracking-wider">{userCode}</strong>
                 </span>
               </div>
             </Link>

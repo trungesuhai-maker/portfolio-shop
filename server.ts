@@ -1414,7 +1414,19 @@ async function startServer() {
     }
 
     const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
-    if (user.passwordHash !== passwordHash) {
+
+    // Seamless Account Linking: If account was created via Google and has no password yet
+    if (user.provider === 'google' && !user.passwordHash) {
+      if (password && password.length >= 6) {
+        user.passwordHash = passwordHash;
+        persistCollection('users');
+        addLog('USER_PASSWORD_AUTO_LINKED', user.id, `Tự động liên kết mật khẩu cho tài khoản Google ${user.email}`, 'info');
+      } else {
+        return res.status(401).json({ 
+          error: "Tài khoản này được tạo bằng Google. Vui lòng bấm 'Đăng nhập với Google' hoặc nhập mật khẩu tối thiểu 6 ký tự để thiết lập đăng nhập thường." 
+        });
+      }
+    } else if (user.passwordHash !== passwordHash) {
       return res.status(401).json({ error: "Tài khoản (Email hoặc Số điện thoại) hoặc mật khẩu không chính xác" });
     }
 

@@ -35,8 +35,8 @@ export const translations = {
     // Auth Pages
     'auth.login.title': 'Đăng nhập',
     'auth.login.subtitle': 'Đăng nhập để quản lý trang của bạn',
-    'auth.email': 'Địa chỉ Email',
-    'auth.password': 'Mật khẩu',
+    'auth.email': 'Nhập địa chỉ email',
+    'auth.password': 'Nhập mật khẩu',
     'auth.remember': 'Ghi nhớ đăng nhập',
     'auth.forgotPass': 'Quên mật khẩu?',
     'auth.login.submit': 'Đăng nhập',
@@ -224,8 +224,8 @@ export const translations = {
     // Auth Pages
     'auth.login.title': 'Welcome back',
     'auth.login.subtitle': 'Log in to manage your portfolio',
-    'auth.email': 'Email address',
-    'auth.password': 'Password',
+    'auth.email': 'Enter your email address',
+    'auth.password': 'Enter your password',
     'auth.remember': 'Remember me',
     'auth.forgotPass': 'Forgot password?',
     'auth.login.submit': 'Sign In',

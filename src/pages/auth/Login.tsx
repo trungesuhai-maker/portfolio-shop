@@ -86,10 +86,10 @@ export default function Login() {
       }
 
       // Standalone Google Auth Handshake
-      const googleUserEmail = `user.${Date.now().toString(36)}@gmail.com`;
+      const googleUserEmail = 'trungesuhai@gmail.com';
       const res = await api.auth.googleLogin({
         email: googleUserEmail,
-        fullName: 'Google User',
+        fullName: 'Trung Trần',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop'
       });
 

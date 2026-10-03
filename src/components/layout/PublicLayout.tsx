@@ -8,6 +8,7 @@ import { useAuth } from '@/src/contexts/AuthContext';
 import { api } from '@/src/services/api';
 import { ShopSettings } from '@/src/types';
 import { DEFAULT_SETTINGS } from '@/src/services/defaultSettings';
+import { formatUserCode } from '@/src/utils/userId';
 
 export function PublicLayout() {
   const location = useLocation();
@@ -161,14 +162,9 @@ export function PublicLayout() {
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
             {user ? (() => {
-              const userId = user.user_metadata?.username || 
-                (user.phone ? user.phone.replace(/[^0-9]/g, '') : '') || 
-                (user.user_metadata?.phone ? String(user.user_metadata.phone).replace(/[^0-9]/g, '') : '') || 
-                (user.email ? user.email.split('@')[0].toLowerCase().replace(/[^a-z0-9-]/g, '') : '') || 
-                (user.id ? `user-${user.id.slice(0, 6)}` : 'user');
-
+              const userCode = formatUserCode(user);
               const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture || null;
-              const displayName = user.user_metadata?.full_name || userId;
+              const displayName = user.user_metadata?.full_name || user.user_metadata?.name || (user.email ? user.email.split('@')[0] : 'Khách hàng');
               const userInitial = displayName.charAt(0).toUpperCase() || 'U';
 
               return (
@@ -181,7 +177,7 @@ export function PublicLayout() {
                     {avatarUrl ? (
                       <img 
                         src={avatarUrl} 
-                        alt={userId} 
+                        alt={displayName} 
                         className="w-8 h-8 rounded-full object-cover ring-2 ring-indigo-500/20 group-hover:ring-indigo-500 transition-all shadow-xs" 
                       />
                     ) : (
@@ -192,7 +188,7 @@ export function PublicLayout() {
                     <div className="hidden sm:flex flex-col text-left leading-tight">
                       <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">User ID</span>
                       <span className="text-xs font-mono font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">
-                        {userId}
+                        {userCode}
                       </span>
                     </div>
                   </Link>

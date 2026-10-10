@@ -1,0 +1,38 @@
+[
+  {
+    "id": "c1",
+    "name": "Software Developer",
+    "slug": "software-developer",
+    "description": "Portfolios for programmers, software engineers, and backend/frontend developers."
+  },
+  {
+    "id": "c2",
+    "name": "Creative Designer",
+    "slug": "creative-designer",
+    "description": "Visual-heavy portfolios for UI/UX, product, and graphic designers."
+  },
+  {
+    "id": "c3",
+    "name": "Photographer & Video Creator",
+    "slug": "photographer-videographer",
+    "description": "High-resolution showcases for photographers, filmmakers, and motion artists."
+  },
+  {
+    "id": "c4",
+    "name": "Architect & 3D Artist",
+    "slug": "architect-3d-artist",
+    "description": "Spatial, interior, architectural design and 3D CGI portfolio templates."
+  },
+  {
+    "id": "c5",
+    "name": "Marketing & Business Consultant",
+    "slug": "marketing-consultant",
+    "description": "Executive portfolios for marketing directors, growth hackers, and business consultants."
+  },
+  {
+    "id": "c6",
+    "name": "Content Creator & Copywriter",
+    "slug": "content-creator",
+    "description": "Modern personal branding and portfolio for writers, journalists, and creators."
+  }
+]

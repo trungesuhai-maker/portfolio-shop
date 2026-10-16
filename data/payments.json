@@ -1,0 +1,35 @@
+[
+  {
+    "id": "PAY-9001",
+    "orderId": "ORD-8941",
+    "provider": "Sandbox",
+    "amount": 49,
+    "currency": "USD",
+    "status": "completed",
+    "transactionRef": "TXN_SB_8941_OK",
+    "createdAt": "2026-09-16T14:32:05Z"
+  },
+  {
+    "id": "PAY-9000",
+    "orderId": "ORD-8940",
+    "provider": "Stripe",
+    "amount": 49,
+    "currency": "USD",
+    "status": "completed",
+    "transactionRef": "ch_3Mx8940_live",
+    "createdAt": "2026-09-16T11:20:04Z"
+  },
+  {
+    "id": "pay-1790929679517",
+    "orderId": "889988",
+    "order_id": "889988",
+    "subdomain": "client",
+    "amount": 390000,
+    "currency": "VND",
+    "provider": "payos",
+    "status": "success",
+    "paid": true,
+    "reference": "FT2610029988",
+    "created_at": "2026-10-02T08:27:59.517Z"
+  }
+]

@@ -1,0 +1,499 @@
+[
+  {
+    "id": "inst-john",
+    "user_id": "usr-1",
+    "template_id": "t1",
+    "name": "John Doe Designer Portfolio",
+    "subdomain": "john",
+    "status": "published",
+    "created_at": "2026-09-01T10:00:00Z",
+    "updated_at": "2026-09-16T15:00:00Z",
+    "custom_data": {
+      "hero_title": "John Doe",
+      "hero_subtitle": "Principal Full Stack & Distributed Systems Engineer",
+      "design_philosophy": "Simplicity is subtracting the obvious and adding the meaningful.",
+      "primary_color": "#4f46e5"
+    }
+  },
+  {
+    "id": "inst-anna",
+    "user_id": "usr-2",
+    "template_id": "tpl-1790753885342",
+    "name": "Anna Taylor Visual Design",
+    "subdomain": "anna",
+    "status": "published",
+    "created_at": "2026-09-05T14:20:00Z",
+    "updated_at": "2026-09-16T12:00:00Z",
+    "custom_data": {
+      "hero_title": "Anna Taylor",
+      "hero_subtitle": "Senior Art Director & Brand Identity Architect",
+      "design_philosophy": "Typography speaks louder than words when shaped with clear intention.",
+      "primary_color": "#ec4899"
+    }
+  },
+  {
+    "id": "inst-trungesuhai",
+    "user_id": "usr-trungesuhai",
+    "template_id": "videograph",
+    "name": "Portfolio trungesuhai",
+    "subdomain": "trungesuhai",
+    "status": "published",
+    "created_at": "2026-10-08T09:53:56.074Z",
+    "updated_at": "2026-10-11T15:02:37.155Z",
+    "custom_data": {
+      "siteSettings": {
+        "siteName": "VIDEOGRAPH",
+        "tagline": "Video Production & Portfolio",
+        "logoImage": "",
+        "socialLinks": {
+          "facebook": "",
+          "instagram": "",
+          "youtube": "",
+          "twitter": "",
+          "dribbble": ""
+        },
+        "footerAboutTitle": "Về chúng tôi",
+        "footerAboutText": "Formed in 2006 by Matt Howman and Daniel Kaim, Videograph has developed into an international video production company.",
+        "footerCopyright": "Copyright © 2026 All rights reserved | Videograph"
+      },
+      "heroSlides": [
+        {
+          "id": "slide-1",
+          "subtitle": "FOR WEBSITE AND VIDEO EDITING",
+          "title": "VIDEOGRAPHER'S PORTFOLIO",
+          "buttonText": "Xem Dự Án",
+          "buttonLink": "#",
+          "backgroundImage": "img/hero/hero-1.jpg"
+        },
+        {
+          "id": "slide-2",
+          "subtitle": "CREATIVE FILM & DIRECTION",
+          "title": "CINEMATIC STORYTELLING",
+          "buttonText": "Khám Phá",
+          "buttonLink": "#",
+          "backgroundImage": "img/hero/hero-2.jpg"
+        },
+        {
+          "id": "slide-3",
+          "subtitle": "COMMERCIAL & BRANDING",
+          "title": "VISUAL PRODUCTION STUDIO",
+          "buttonText": "Liên Hệ",
+          "buttonLink": "#",
+          "backgroundImage": "img/hero/hero-3.jpg"
+        }
+      ],
+      "homeServices": {
+        "tag": "Dịch vụ của chúng tôi",
+        "title": "Chúng tôi làm gì?",
+        "description": "Nếu bạn cần một đội ngũ sản xuất video chuyên nghiệp để tạo ra video chất lượng cao cho doanh nghiệp của bạn.",
+        "buttonText": "Tất cả dịch vụ",
+        "buttonLink": "/services.html"
+      },
+      "services": [
+        {
+          "id": "srv-1",
+          "title": "Quay dựng Motion Graphics",
+          "description": "Tạo hoạt họa đồ họa chuyển động bắt mắt, giải thích sản phẩm trực quan sinh động.",
+          "icon": "fa-film"
+        },
+        {
+          "id": "srv-2",
+          "title": "Sản xuất Kịch bản & Kịch bản phân cảnh",
+          "description": "Xây dựng kịch bản chi tiết, phân cảnh rõ ràng giúp định hướng toàn bộ buổi quay.",
+          "icon": "fa-pencil"
+        },
+        {
+          "id": "srv-3",
+          "title": "Video Marketing Doanh nghiệp",
+          "description": "Các thước phim quảng bá thương hiệu, phỏng vấn lãnh đạo và video giới thiệu công ty.",
+          "icon": "fa-video-camera"
+        },
+        {
+          "id": "srv-4",
+          "title": "Quay phim Sự kiện & Teaser",
+          "description": "Ghi lại mọi khoảnh khắc đắt giá trong sự kiện, hội nghị và tạo video tóm tắt ấn tượng.",
+          "icon": "fa-play"
+        }
+      ],
+      "portfolioProjects": [
+        {
+          "id": "proj-1",
+          "title": "Phim ngắn nghệ thuật - The Horizon",
+          "category": "Phim ngắn",
+          "client": "Indie Studio",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-1.jpg"
+        },
+        {
+          "id": "proj-2",
+          "title": "Video quảng cáo thời trang Luxury",
+          "category": "Quảng cáo",
+          "client": "Vogue Style",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-2.jpg"
+        },
+        {
+          "id": "proj-3",
+          "title": "Phim tài liệu Kiến trúc đô thị",
+          "category": "Tài liệu",
+          "client": "Urban Arch",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-3.jpg"
+        },
+        {
+          "id": "proj-4",
+          "title": "Music Video - Lofi Chill Beats",
+          "category": "MV Âm nhạc",
+          "client": "Indie Artist",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-4.jpg"
+        },
+        {
+          "id": "proj-5",
+          "title": "TVC Giới thiệu Siêu xe Thể thao",
+          "category": "Thương mại",
+          "client": "Auto Motors",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-5.jpg"
+        },
+        {
+          "id": "proj-6",
+          "title": "Video ẩm thực Food & Beverage",
+          "category": "Ẩm thực",
+          "client": "Gourmet House",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-6.jpg"
+        },
+        {
+          "id": "proj-7",
+          "title": "Highlight Lễ hội Âm nhạc Quốc tế",
+          "category": "Sự kiện",
+          "client": "Music Fest",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-7.jpg"
+        }
+      ],
+      "counterStats": {
+        "projectsCount": "230+",
+        "clientsCount": "1068+",
+        "awardsCount": "503+",
+        "experienceYears": "879+"
+      },
+      "homeTeamSection": {
+        "tag": "Đội ngũ chuyên nghiệp",
+        "title": "Ai đứng sau ống kính?",
+        "description": "Các đạo diễn, quay phim và chuyên viên hậu kỳ tài năng sẵn sàng đồng hành cùng bạn.",
+        "buttonText": "Gặp gỡ đội ngũ",
+        "buttonLink": "/about.html"
+      },
+      "teamMembers": [
+        {
+          "id": "tm-1",
+          "name": "Amanda Stone",
+          "role": "Đạo diễn chính",
+          "avatar": "img/team/team-1.jpg"
+        },
+        {
+          "id": "tm-2",
+          "name": "David Miller",
+          "role": "Chỉ đạo hình ảnh (DOP)",
+          "avatar": "img/team/team-2.jpg"
+        },
+        {
+          "id": "tm-3",
+          "name": "Sophia Chen",
+          "role": "Chuyên viên Hậu kỳ & Màu sắc",
+          "avatar": "img/team/team-3.jpg"
+        },
+        {
+          "id": "tm-4",
+          "name": "James Wilson",
+          "role": "Kỹ sư Âm thanh & FX",
+          "avatar": "img/team/team-4.jpg"
+        }
+      ],
+      "homeBlogSection": {
+        "tag": "Bài viết mới nhất",
+        "title": "Góc nhìn & Kiến thức",
+        "description": "Những kinh nghiệm quay phim, kỹ thuật chỉnh màu và xu hướng sản xuất video mới nhất.",
+        "buttonText": "Xem tất cả bài viết",
+        "buttonLink": "/blog.html"
+      },
+      "blogPosts": [
+        {
+          "id": "bp-1",
+          "title": "Top 5 góc máy điện ảnh bạn cần biết",
+          "date": "Tháng 3, 2026",
+          "commentsCount": "12 bình luận",
+          "category": "Kỹ thuật",
+          "image": "img/blog/blog-1.jpg",
+          "excerpt": "Khám phá cách sử dụng các góc quay sáng tạo để truyền tải trọn vẹn cảm xúc của nhân vật."
+        },
+        {
+          "id": "bp-2",
+          "title": "Nghệ thuật chỉnh màu trong phim thương mại",
+          "date": "Tháng 3, 2026",
+          "commentsCount": "8 bình luận",
+          "category": "Hậu kỳ",
+          "image": "img/blog/blog-2.jpg",
+          "excerpt": "Hướng dẫn quy trình Color Grading chuyên nghiệp từ LOG sang Rec.709 với phong cách điện ảnh."
+        },
+        {
+          "id": "bp-3",
+          "title": "Bí quyết chọn thiết bị quay phim sự kiện",
+          "date": "Tháng 3, 2026",
+          "commentsCount": "15 bình luận",
+          "category": "Thiết bị",
+          "image": "img/blog/blog-3.jpg",
+          "excerpt": "Danh sách máy quay, ống kính và gimbal tối ưu nhất cho các buổi quay sự kiện kéo dài."
+        }
+      ],
+      "contactInfo": {
+        "phone": "0987.654.321",
+        "email": "contact@videograph.vn",
+        "address": "123 Đường Điện Ảnh, Quận 1, TP. Hồ Chí Minh",
+        "workingHours": "Thứ 2 - Thứ 7: 08:30 - 18:00"
+      },
+      "callToAction": {
+        "title": "Ý TƯỞNG TƯƠI MỚI, KHOẢNH KHẮC SỐNG ĐỘNG",
+        "subtitle": "Hãy để chúng tôi chắp cánh cho câu chuyện thương hiệu của bạn bay xa",
+        "buttonText": "Bắt đầu dự án cùng chúng tôi",
+        "buttonLink": "/contact.html"
+      }
+    },
+    "published_data": {
+      "siteSettings": {
+        "siteName": "VIDEOGRAPH",
+        "tagline": "Video Production & Portfolio",
+        "logoImage": "",
+        "socialLinks": {
+          "facebook": "",
+          "instagram": "",
+          "youtube": "",
+          "twitter": "",
+          "dribbble": ""
+        },
+        "footerAboutTitle": "Về chúng tôi",
+        "footerAboutText": "Formed in 2006 by Matt Howman and Daniel Kaim, Videograph has developed into an international video production company.",
+        "footerCopyright": "Copyright © 2026 All rights reserved | Videograph"
+      },
+      "heroSlides": [
+        {
+          "id": "slide-1",
+          "subtitle": "FOR WEBSITE AND VIDEO EDITING",
+          "title": "VIDEOGRAPHER'S PORTFOLIO",
+          "buttonText": "Xem Dự Án",
+          "buttonLink": "#",
+          "backgroundImage": "img/hero/hero-1.jpg"
+        },
+        {
+          "id": "slide-2",
+          "subtitle": "CREATIVE FILM & DIRECTION",
+          "title": "CINEMATIC STORYTELLING",
+          "buttonText": "Khám Phá",
+          "buttonLink": "#",
+          "backgroundImage": "img/hero/hero-2.jpg"
+        },
+        {
+          "id": "slide-3",
+          "subtitle": "COMMERCIAL & BRANDING",
+          "title": "VISUAL PRODUCTION STUDIO",
+          "buttonText": "Liên Hệ",
+          "buttonLink": "#",
+          "backgroundImage": "img/hero/hero-3.jpg"
+        }
+      ],
+      "homeServices": {
+        "tag": "Dịch vụ của chúng tôi",
+        "title": "Chúng tôi làm gì?",
+        "description": "Nếu bạn cần một đội ngũ sản xuất video chuyên nghiệp để tạo ra video chất lượng cao cho doanh nghiệp của bạn.",
+        "buttonText": "Tất cả dịch vụ",
+        "buttonLink": "/services.html"
+      },
+      "services": [
+        {
+          "id": "srv-1",
+          "title": "Quay dựng Motion Graphics",
+          "description": "Tạo hoạt họa đồ họa chuyển động bắt mắt, giải thích sản phẩm trực quan sinh động.",
+          "icon": "fa-film"
+        },
+        {
+          "id": "srv-2",
+          "title": "Sản xuất Kịch bản & Kịch bản phân cảnh",
+          "description": "Xây dựng kịch bản chi tiết, phân cảnh rõ ràng giúp định hướng toàn bộ buổi quay.",
+          "icon": "fa-pencil"
+        },
+        {
+          "id": "srv-3",
+          "title": "Video Marketing Doanh nghiệp",
+          "description": "Các thước phim quảng bá thương hiệu, phỏng vấn lãnh đạo và video giới thiệu công ty.",
+          "icon": "fa-video-camera"
+        },
+        {
+          "id": "srv-4",
+          "title": "Quay phim Sự kiện & Teaser",
+          "description": "Ghi lại mọi khoảnh khắc đắt giá trong sự kiện, hội nghị và tạo video tóm tắt ấn tượng.",
+          "icon": "fa-play"
+        }
+      ],
+      "portfolioProjects": [
+        {
+          "id": "proj-1",
+          "title": "Phim ngắn nghệ thuật - The Horizon",
+          "category": "Phim ngắn",
+          "client": "Indie Studio",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-1.jpg"
+        },
+        {
+          "id": "proj-2",
+          "title": "Video quảng cáo thời trang Luxury",
+          "category": "Quảng cáo",
+          "client": "Vogue Style",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-2.jpg"
+        },
+        {
+          "id": "proj-3",
+          "title": "Phim tài liệu Kiến trúc đô thị",
+          "category": "Tài liệu",
+          "client": "Urban Arch",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-3.jpg"
+        },
+        {
+          "id": "proj-4",
+          "title": "Music Video - Lofi Chill Beats",
+          "category": "MV Âm nhạc",
+          "client": "Indie Artist",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-4.jpg"
+        },
+        {
+          "id": "proj-5",
+          "title": "TVC Giới thiệu Siêu xe Thể thao",
+          "category": "Thương mại",
+          "client": "Auto Motors",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-5.jpg"
+        },
+        {
+          "id": "proj-6",
+          "title": "Video ẩm thực Food & Beverage",
+          "category": "Ẩm thực",
+          "client": "Gourmet House",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-6.jpg"
+        },
+        {
+          "id": "proj-7",
+          "title": "Highlight Lễ hội Âm nhạc Quốc tế",
+          "category": "Sự kiện",
+          "client": "Music Fest",
+          "videoUrl": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+          "image": "img/work/work-7.jpg"
+        }
+      ],
+      "counterStats": {
+        "projectsCount": "230+",
+        "clientsCount": "1068+",
+        "awardsCount": "503+",
+        "experienceYears": "879+"
+      },
+      "homeTeamSection": {
+        "tag": "Đội ngũ chuyên nghiệp",
+        "title": "Ai đứng sau ống kính?",
+        "description": "Các đạo diễn, quay phim và chuyên viên hậu kỳ tài năng sẵn sàng đồng hành cùng bạn.",
+        "buttonText": "Gặp gỡ đội ngũ",
+        "buttonLink": "/about.html"
+      },
+      "teamMembers": [
+        {
+          "id": "tm-1",
+          "name": "Amanda Stone",
+          "role": "Đạo diễn chính",
+          "avatar": "img/team/team-1.jpg"
+        },
+        {
+          "id": "tm-2",
+          "name": "David Miller",
+          "role": "Chỉ đạo hình ảnh (DOP)",
+          "avatar": "img/team/team-2.jpg"
+        },
+        {
+          "id": "tm-3",
+          "name": "Sophia Chen",
+          "role": "Chuyên viên Hậu kỳ & Màu sắc",
+          "avatar": "img/team/team-3.jpg"
+        },
+        {
+          "id": "tm-4",
+          "name": "James Wilson",
+          "role": "Kỹ sư Âm thanh & FX",
+          "avatar": "img/team/team-4.jpg"
+        }
+      ],
+      "homeBlogSection": {
+        "tag": "Bài viết mới nhất",
+        "title": "Góc nhìn & Kiến thức",
+        "description": "Những kinh nghiệm quay phim, kỹ thuật chỉnh màu và xu hướng sản xuất video mới nhất.",
+        "buttonText": "Xem tất cả bài viết",
+        "buttonLink": "/blog.html"
+      },
+      "blogPosts": [
+        {
+          "id": "bp-1",
+          "title": "Top 5 góc máy điện ảnh bạn cần biết",
+          "date": "Tháng 3, 2026",
+          "commentsCount": "12 bình luận",
+          "category": "Kỹ thuật",
+          "image": "img/blog/blog-1.jpg",
+          "excerpt": "Khám phá cách sử dụng các góc quay sáng tạo để truyền tải trọn vẹn cảm xúc của nhân vật."
+        },
+        {
+          "id": "bp-2",
+          "title": "Nghệ thuật chỉnh màu trong phim thương mại",
+          "date": "Tháng 3, 2026",
+          "commentsCount": "8 bình luận",
+          "category": "Hậu kỳ",
+          "image": "img/blog/blog-2.jpg",
+          "excerpt": "Hướng dẫn quy trình Color Grading chuyên nghiệp từ LOG sang Rec.709 với phong cách điện ảnh."
+        },
+        {
+          "id": "bp-3",
+          "title": "Bí quyết chọn thiết bị quay phim sự kiện",
+          "date": "Tháng 3, 2026",
+          "commentsCount": "15 bình luận",
+          "category": "Thiết bị",
+          "image": "img/blog/blog-3.jpg",
+          "excerpt": "Danh sách máy quay, ống kính và gimbal tối ưu nhất cho các buổi quay sự kiện kéo dài."
+        }
+      ],
+      "contactInfo": {
+        "phone": "0987.654.321",
+        "email": "contact@videograph.vn",
+        "address": "123 Đường Điện Ảnh, Quận 1, TP. Hồ Chí Minh",
+        "workingHours": "Thứ 2 - Thứ 7: 08:30 - 18:00"
+      },
+      "callToAction": {
+        "title": "Ý TƯỞNG TƯƠI MỚI, KHOẢNH KHẮC SỐNG ĐỘNG",
+        "subtitle": "Hãy để chúng tôi chắp cánh cho câu chuyện thương hiệu của bạn bay xa",
+        "buttonText": "Bắt đầu dự án cùng chúng tôi",
+        "buttonLink": "/contact.html"
+      }
+    }
+  },
+  {
+    "id": "inst-x6sumo3",
+    "user_id": "guest",
+    "template_id": "t1",
+    "name": "Portfolio x6sumo3",
+    "subdomain": "x6sumo3",
+    "status": "published",
+    "created_at": "2026-10-12T07:20:30.681Z",
+    "updated_at": "2026-10-12T07:20:30.681Z",
+    "custom_data": {
+      "test": 1
+    }
+  }
+]

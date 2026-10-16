@@ -1,0 +1,80 @@
+{
+  "$schema": "https://portfolio-shop.com/schemas/v1/contract.json",
+  "template_id": "designer-portfolio",
+  "version": "1.0.0",
+  "schemaVersion": "1.0.0",
+  "origin_url": "https://designer-portfolio.ai.studio.run.app",
+  "demo_url": "https://designer-demo.portfolio-shop.com",
+  "metadata": {
+    "name": "Project A: Designer Portfolio",
+    "description": "Chuyên biệt cho UI/UX Designer, Art Director & Visual Creator với canvas tương tác và bento showcase.",
+    "author": {
+      "name": "Studio Minimal Lab",
+      "email": "creators@studiominimal.io",
+      "aiStudioProfile": "https://ai.studio/creators/studiominimal"
+    },
+    "category": "designer",
+    "tags": ["Designer", "UI/UX", "Figma", "Interactive", "Bento"],
+    "thumbnail": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1542744094-24638eff58bb?w=800&auto=format&fit=crop&q=80"
+    ],
+    "features": [
+      "Interactive Bento Grid",
+      "Figma Project Importer",
+      "Dark/Light Studio Mode",
+      "Case Study Viewer"
+    ],
+    "supportedDevices": ["desktop", "tablet", "mobile"],
+    "license": "Commercial License (Per Customer Instance)"
+  },
+  "schema": {
+    "fields": [
+      {
+        "key": "hero_title",
+        "type": "string",
+        "label": "Họ & Tên / Studio Brand",
+        "isRequired": true,
+        "defaultValue": "Elena Rostova",
+        "placeholder": "VD: Elena Rostova",
+        "group": "hero"
+      },
+      {
+        "key": "hero_subtitle",
+        "type": "text",
+        "label": "Chức danh & Lĩnh vực",
+        "isRequired": true,
+        "defaultValue": "Senior Product Designer & Design Systems Lead at San Francisco",
+        "group": "hero"
+      },
+      {
+        "key": "design_philosophy",
+        "type": "text",
+        "label": "Triết lý Thiết kế",
+        "isRequired": false,
+        "defaultValue": "Thiết kế không chỉ là thẩm mỹ thị giác mà là cách một giải pháp số vận hành liền mạch trong cuộc sống người dùng.",
+        "group": "about"
+      },
+      {
+        "key": "primary_color",
+        "type": "color",
+        "label": "Màu Nhấn (Accent Color)",
+        "isRequired": false,
+        "defaultValue": "#6366f1",
+        "group": "theme"
+      }
+    ]
+  },
+  "defaultData": {
+    "hero_title": "Elena Rostova",
+    "hero_subtitle": "Senior Product Designer & Design Systems Lead at San Francisco",
+    "design_philosophy": "Thiết kế không chỉ là thẩm mỹ thị giác mà là cách một giải pháp số vận hành liền mạch trong cuộc sống người dùng.",
+    "primary_color": "#6366f1"
+  },
+  "hydrationProtocol": {
+    "postMessageSupported": true,
+    "serverHydrationSupported": true,
+    "standaloneFallback": true
+  }
+}

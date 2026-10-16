@@ -1,0 +1,6 @@
+{
+  "name": "Portfolio Shop",
+  "description": "Premium Portfolio Template Marketplace",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

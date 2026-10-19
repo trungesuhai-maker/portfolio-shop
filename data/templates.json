@@ -272,19 +272,65 @@
     "slug": "LUCY",
     "description": "Mẫu portfolio sáng tạo được xây dựng trên nền tảng AI Studio.",
     "categoryId": "c3",
-    "categoryName": "Software Developer",
+    "categoryName": "Photographer & Video Creator",
     "templateType": "PORTFOLIO",
-    "price": 12000,
-    "salePrice": null,
+    "price": 2500,
+    "salePrice": 2000,
     "thumbnail": "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800&auto=format&fit=crop&q=80",
-    "gallery": [],
+    "gallery": [
+      "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800&auto=format&fit=crop&q=80"
+    ],
     "demoUrl": "https://lucy.webcuaban.site/",
     "originUrl": "https://lucy.webcuaban.site/",
     "adminUrl": "https://lucy.webcuaban.site/admin.html",
     "version": "1.0.0",
     "status": "published",
     "tags": [],
-    "isNew": true,
-    "badge": "Mới"
+    "isNew": false,
+    "badge": "Mới",
+    "currency": "VND",
+    "schemaVersion": "1.0.0",
+    "bgColorClass": "bg-slate-100",
+    "isPopular": false,
+    "isFeatured": false,
+    "seo": {
+      "titleTemplate": "%s | LUCY",
+      "description": "Mẫu portfolio sáng tạo được xây dựng trên nền tảng AI Studio."
+    },
+    "editableFields": [
+      {
+        "id": "f1",
+        "key": "tieu_e_chinh_hero_title",
+        "label": "Tiêu đề chính (Hero Title)",
+        "type": "string",
+        "isRequired": false,
+        "defaultValue": "Hello, I am a Creator",
+        "orderIndex": 1
+      },
+      {
+        "id": "f2",
+        "key": "mo_ta_ngan_hero_subtitle",
+        "label": "Mô tả ngắn (Hero Subtitle)",
+        "type": "string",
+        "isRequired": false,
+        "defaultValue": "Building intuitive web experiences",
+        "orderIndex": 2
+      },
+      {
+        "id": "f3",
+        "key": "mau_nhan_thuong_hieu",
+        "label": "Màu nhấn thương hiệu",
+        "type": "color",
+        "isRequired": false,
+        "defaultValue": "#4f46e5",
+        "orderIndex": 3
+      }
+    ],
+    "defaultData": {
+      "tieu_e_chinh_hero_title": "Hello, I am a Creator",
+      "mo_ta_ngan_hero_subtitle": "Building intuitive web experiences",
+      "mau_nhan_thuong_hieu": "#4f46e5"
+    },
+    "updatedAt": "2026-10-19T08:52:18.750Z"
   }
 ]

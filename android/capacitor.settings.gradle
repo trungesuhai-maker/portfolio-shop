@@ -1,0 +1,13 @@
+// Capacitor Local & Portable Settings
+def capAndroidDir = new File(rootDir, 'capacitor-android').exists() ? new File(rootDir, 'capacitor-android') : new File(rootDir, '../node_modules/@capacitor/android/capacitor')
+include ':capacitor-android'
+project(':capacitor-android').projectDir = capAndroidDir
+
+def capAppDir = new File(rootDir, 'capacitor-app').exists() ? new File(rootDir, 'capacitor-app') : new File(rootDir, '../node_modules/@capacitor/app/android')
+include ':capacitor-app'
+project(':capacitor-app').projectDir = capAppDir
+
+def capStatusBarDir = new File(rootDir, 'capacitor-status-bar').exists() ? new File(rootDir, 'capacitor-status-bar') : new File(rootDir, '../node_modules/@capacitor/status-bar/android')
+include ':capacitor-status-bar'
+project(':capacitor-status-bar').projectDir = capStatusBarDir
+

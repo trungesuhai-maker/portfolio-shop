@@ -1541,6 +1541,18 @@
      * ĐẶC BIỆT: Tự động ẨN khi phát hiện có bất kỳ Popup / Modal / Dialog nào đang mở để không che đè!
      */
     initTrialHeader: function () {
+      // 0. Nếu đang nằm trong iframe (ví dụ modal preview hoặc trình xem demo của webcuaban.site)
+      // TUYỆT ĐỐI không render banner và không can thiệp padding!
+      var isInIframe = false;
+      try {
+        isInIframe = window.self !== window.top;
+      } catch (e) {
+        isInIframe = true;
+      }
+      if (isInIframe) {
+        return;
+      }
+
       var info = this.getInstanceInfo();
       if (info.isLicensed) {
         return;
@@ -1550,7 +1562,8 @@
 
       var bannerHeight = 46;
 
-      // 1. Chèn CSS chuyên dụng để điều chỉnh vị trí an toàn cho tất cả header / navbar của template con
+      // 1. Chèn CSS chuyên dụng - CHỈ áp dụng padding-top cho body khi banner hiển thị
+      // TUYỆT ĐỐI KHÔNG ép top: 46px bừa bãi lên header.sticky (tránh làm lệch header của trang Admin!)
       var styleId = 'shop-bridge-banner-offset-style';
       if (!document.getElementById(styleId)) {
         var styleEl = document.createElement('style');
@@ -1558,18 +1571,6 @@
         styleEl.textContent = 
           'body.has-trial-banner {' +
           '  padding-top: ' + bannerHeight + 'px !important;' +
-          '}' +
-          'body.has-trial-banner > header,' +
-          'body.has-trial-banner header.fixed,' +
-          'body.has-trial-banner header.sticky,' +
-          'body.has-trial-banner nav.fixed,' +
-          'body.has-trial-banner nav.sticky,' +
-          'body.has-trial-banner .navbar-fixed-top,' +
-          'body.has-trial-banner .sticky-top,' +
-          'body.has-trial-banner [data-header],' +
-          'body.has-trial-banner #header,' +
-          'body.has-trial-banner #navbar {' +
-          '  top: ' + bannerHeight + 'px !important;' +
           '}' +
           '@media (max-width: 640px) {' +
           '  #shop-trial-banner .trial-banner-text-long { display: none !important; }' +
@@ -1580,7 +1581,7 @@
 
       document.body.classList.add('has-trial-banner');
 
-      // 2. Tạo Banner Mua Template với vị trí cao nhất (z-index 99999), giao diện hiện đại & an toàn
+      // 2. Tạo Banner Mua Template với vị trí cao nhất (z-index 99999)
       var banner = document.createElement('div');
       banner.id = 'shop-trial-banner';
       banner.style.cssText = 'position:fixed;top:0;left:0;right:0;height:' + bannerHeight + 'px;z-index:99999;' +
@@ -1607,13 +1608,14 @@
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;flex-shrink:0;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>' +
         '<span style="color:#f97316;letter-spacing:0.2px;">MUA NGAY</span>' +
         '</a>' +
-        '<button onclick="var b=document.getElementById(\'shop-trial-banner\');if(b)b.remove();document.body.classList.remove(\'has-trial-banner\');document.body.style.paddingTop=\'\';" style="background:transparent;border:none;color:#ffffff;cursor:pointer;font-size:16px;padding:2px 6px;opacity:0.75;line-height:1;" title="Đóng banner">✕</button>' +
+        '<button onclick="var b=document.getElementById(\'shop-trial-banner\');if(b)b.remove();document.body.classList.remove(\'has-trial-banner\');document.body.style.paddingTop=\'\';var offEls=document.querySelectorAll(\'[data-shop-offset=\\\'true\\\']\');for(var i=0;i<offEls.length;i++){offEls[i].style.top=\'\';offEls[i].removeAttribute(\'data-shop-offset\');}" style="background:transparent;border:none;color:#ffffff;cursor:pointer;font-size:16px;padding:2px 6px;opacity:0.75;line-height:1;" title="Đóng banner">✕</button>' +
         '</div>' +
         '</div>';
 
       document.body.prepend(banner);
 
-      // 3. Quét động các fixed/sticky header của template con để gán top an toàn ngay cả khi dùng class tùy ý
+      // 3. CHỈ điều chỉnh những header CỐ ĐỊNH TOÀN MÀN HÌNH ở trang chủ (position: fixed & bám sát top: 0 của viewport)
+      // TUYỆT ĐỐI không điều chỉnh header bên trong layout trang Admin (như topbar cạnh sidebar) vì body đã có padding-top: 46px tự nhiên!
       var adjustChildHeaders = function () {
         var bannerEl = document.getElementById('shop-trial-banner');
         var bannerVisible = bannerEl && bannerEl.style.display !== 'none';
@@ -1625,10 +1627,14 @@
             var el = candidates[c];
             if (el.id === 'shop-trial-banner' || (bannerEl && bannerEl.contains(el))) continue;
             var cs = window.getComputedStyle(el);
-            if (cs.position === 'fixed' || cs.position === 'sticky') {
-              var currentTop = parseInt(cs.top, 10);
-              // Nếu đang bám mép đỉnh (<= 5px hoặc 0) thì dịch chuyển xuống dưới banner
-              if (isNaN(currentTop) || currentTop <= 5 || el.getAttribute('data-shop-offset') === 'true') {
+            
+            // CHỈ áp dụng khi phần tử thực sự là fixed bám đỉnh viewport toàn màn hình
+            if (cs.position === 'fixed') {
+              var rect = el.getBoundingClientRect();
+              var isFullWidth = rect.width >= (window.innerWidth * 0.85);
+              var isTopAffinity = rect.top <= 8 || el.getAttribute('data-shop-offset') === 'true';
+
+              if (isFullWidth && isTopAffinity) {
                 if (bannerVisible) {
                   el.style.setProperty('top', offsetValue, 'important');
                   el.setAttribute('data-shop-offset', 'true');
@@ -1640,35 +1646,6 @@
             }
           }
         } catch (e) {}
-
-        // Bù thêm padding-top an toàn cho main container (đặc biệt trong trang admin) để không bao giờ bị đè cụt chữ tiêu đề
-        try {
-          var mainAreas = document.querySelectorAll('main, [role="main"], .main-content, #main-content, .dashboard-content, .admin-main, .admin-content, .app-main, [class*="content"]');
-          for (var m = 0; m < mainAreas.length; m++) {
-            var mEl = mainAreas[m];
-            if (mEl.id === 'shop-trial-banner' || (bannerEl && bannerEl.contains(mEl))) continue;
-            var csMain = window.getComputedStyle(mEl);
-            if (csMain.position === 'fixed' || csMain.position === 'sticky') continue;
-            // Chỉ áp dụng cho container lớn cấp cao (chiều cao > 150px và chiều rộng > 300px)
-            if (mEl.offsetWidth > 300 && mEl.offsetHeight > 150) {
-              if (bannerVisible) {
-                if (!mEl.getAttribute('data-shop-main-padded')) {
-                  var curPad = parseInt(csMain.paddingTop, 10) || 0;
-                  mEl.setAttribute('data-shop-orig-padding', curPad.toString());
-                  mEl.style.paddingTop = (curPad + 18) + 'px';
-                  mEl.setAttribute('data-shop-main-padded', 'true');
-                  break; // Chỉ cần bù cho container chính đầu tiên
-                }
-              } else if (mEl.getAttribute('data-shop-main-padded') === 'true') {
-                var oPad = mEl.getAttribute('data-shop-orig-padding');
-                mEl.style.paddingTop = oPad ? (oPad + 'px') : '';
-                mEl.removeAttribute('data-shop-main-padded');
-                mEl.removeAttribute('data-shop-orig-padding');
-                break;
-              }
-            }
-          }
-        } catch (mErr) {}
       };
 
       adjustChildHeaders();
